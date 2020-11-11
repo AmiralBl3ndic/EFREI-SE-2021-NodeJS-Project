@@ -11,6 +11,18 @@ const defaultPort = 3000;
 ////////////////////////////////////////////////////////////
 // Verify required environment variables are set
 ////////////////////////////////////////////////////////////
+const requiredEnvVariables = [];
+
+// Check that each required variable is set with a value that is not null nor undefined
+requiredEnvVariables.forEach((variable) => {
+	if (process.env[variable] == null) {
+		// eslint-disable-next-line no-console
+		console.error(
+			`Environment variable ${variable} must be set for the app to run`,
+		);
+		process.exit(1);
+	}
+});
 
 ////////////////////////////////////////////////////////////
 // Compute actual configuration values
