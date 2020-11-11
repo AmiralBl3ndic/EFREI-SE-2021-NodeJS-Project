@@ -43,6 +43,10 @@ components:
           example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
 
 paths:
+  ################################################################
+  # Documentation routes
+  ################################################################
+
   /docs:
     get:
       description: Swagger UI of the API
@@ -51,6 +55,10 @@ paths:
       responses:
         200:
           description: HTML page to render Swagger UI.
+
+  ################################################################
+  # Auth routes
+  ################################################################
 
   /auth/register:
     post:
@@ -71,6 +79,18 @@ paths:
           description: Account created
           content:
             application/json:
-              description: Login success data
               schema:
                 $ref: '#/components/schemas/LoginSuccessData'
+        409:
+          description: Username or email already in use by another user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reason:
+                    description: The reason why the account creation is declined
+                    type: string
+                    enum:
+                      - 'Username already used by another user'
+                      - 'Email already used by another user'
