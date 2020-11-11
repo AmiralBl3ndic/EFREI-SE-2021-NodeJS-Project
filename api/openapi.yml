@@ -6,3 +6,11 @@ info:
   version: 0.0.0
 
 basePath: /api
+
+paths:
+  /docs:
+    get:
+      description: Swagger UI of the API
+      responses:
+        200:
+          description: HTML page to render Swagger UI.
