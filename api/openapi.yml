@@ -7,10 +7,70 @@ info:
 
 basePath: /api
 
+components:
+  schemas:
+    UserRegistrationData:
+      description: Data required to create a user account
+      type: object
+      properties:
+        username:
+          description: Unique identifier of the user, will serve as a login credential
+          type: string
+          required: true
+          example: 'H4ckerman'
+        password:
+          description: Password for the user, will serve as the second half of the login credentials
+          type: string
+          required: true
+          example: 'Sup3rStrongP4SsW0rd'
+        email:
+          description: Email adress of the user
+          type: string
+          required: true
+          example: 'john.doe@mail.com'
+
+    LoginSuccessData:
+      description: Login success data with an authentication token
+      type: object
+      properties:
+        username:
+          description: Username of the logged-in user
+          type: string
+          example: 'H4ckerman'
+        token:
+          description: JWT Token to be used in the Authorization header with Bearer authentication type
+          type: string
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+
 paths:
   /docs:
     get:
       description: Swagger UI of the API
+      tags:
+        - Documentation
       responses:
         200:
           description: HTML page to render Swagger UI.
+
+  /auth/register:
+    post:
+      description: Create a new user account
+      tags:
+        - Auth
+      requestBody:
+        description: Registration data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationData'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationData'
+      responses:
+        201:
+          description: Account created
+          content:
+            application/json:
+              description: Login success data
+              schema:
+                $ref: '#/components/schemas/LoginSuccessData'
