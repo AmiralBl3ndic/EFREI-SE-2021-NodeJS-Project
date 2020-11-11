@@ -42,6 +42,20 @@ components:
           type: string
           example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
 
+    LoginFormData:
+      description: Login information
+      type: object
+      properties:
+        username:
+          description: Username of the user to log in
+          type: string
+          example: 'H4ckerman'
+          required: true
+        password:
+          description: Password of the user to log in
+          type: string
+          required: true
+
 paths:
   ################################################################
   # Documentation routes
@@ -94,3 +108,50 @@ paths:
                     enum:
                       - 'Username already used by another user'
                       - 'Email already used by another user'
+
+  /auth/login:
+    post:
+      description: Login to an existing account
+      tags:
+        - Auth
+      requestBody:
+        description: Login information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginFormData'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginFormData'
+      responses:
+        200:
+          description: Login successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginSuccessData'
+        401:
+          description: Wrong credentials combination
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reason:
+                    type: string
+                    enum:
+                      - 'Wrong credentials'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    description: Username which no user can be found with
+                    type: string
+                  reason:
+                    type: string
+                    enum:
+                      - 'User not found'
