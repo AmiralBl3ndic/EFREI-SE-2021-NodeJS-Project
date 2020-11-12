@@ -1,5 +1,6 @@
 const express = require('express');
 const { StatusCodes } = require('http-status-codes');
+const AuthService = require('../../services/auth.service');
 const UserService = require('../../services/user.service');
 const router = express.Router();
 
@@ -74,7 +75,7 @@ function validateRequest(req, res, next) {
 	next();
 }
 
-router.post('/', validateRequest, async (req, res, next) => {
+router.post('/', validateRequest, async (req, res) => {
 	// Check the availability of the credentials
 	if (
 		await UserService.isEmailOrUsernameTaken(req.body.email, req.body.username)
@@ -90,7 +91,10 @@ router.post('/', validateRequest, async (req, res, next) => {
 				message: 'Unable to create user',
 			});
 
-		next();
+		return res.status(StatusCodes.CREATED).json({
+			username: req.body.username,
+			token: AuthService.issueJwt(req.body.username),
+		});
 	} catch (error) {
 		if (process.env.NODE_ENV === 'production')
 			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
