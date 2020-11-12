@@ -406,3 +406,57 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         403:
           $ref: '#/components/responses/Forbidden'
+
+  # Note data
+  /users/{username}/notes/{noteId}:
+    get:
+      description: Get note informations
+      operationId: getUserNote
+      tags:
+        - Users
+        - Notes
+      parameters:
+        - name: username
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: noteId
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: Note exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  author:
+                    type: string
+                    description: User who owns the note
+                    example: 'H4ckerman'
+                  title:
+                    type: string
+                    description: The title of the note
+                    example: "Explain Kubernetes like I'm five"
+                  content:
+                    type: string
+                    description: Markdown representation of the current version of the note
+                    example: "# Headline 1\n\n## Headline 2\n\nContent of a paragraph"
+                  id:
+                    type: string
+                    description: ID of the note (should be idential to noteId from path)
+                    example: 'f9a805h'
+          links:
+            GetRevisions:
+              operationId: getUserNoteRevisions
+              parameters:
+                username: '$request.path.username'
+                noteId: '$request.path.noteId'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
