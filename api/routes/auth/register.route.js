@@ -1,5 +1,6 @@
 const express = require('express');
 const { StatusCodes } = require('http-status-codes');
+const UserService = require('../../services/user.service');
 const router = express.Router();
 
 const min8CharsRegex = /^.{8,}$/;
@@ -73,8 +74,33 @@ function validateRequest(req, res, next) {
 	next();
 }
 
-router.post('/', validateRequest, (req, res) => {
-	return res.status(StatusCodes.NOT_IMPLEMENTED).send();
+router.post('/', validateRequest, async (req, res, next) => {
+	// Check the availability of the credentials
+	if (
+		await UserService.isEmailOrUsernameTaken(req.body.email, req.body.username)
+	) {
+		return res.status(StatusCodes.CONFLICT).send();
+	}
+
+	try {
+		const user = await UserService.create(req.body);
+
+		if (!user)
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: 'Unable to create user',
+			});
+
+		next();
+	} catch (error) {
+		if (process.env.NODE_ENV === 'production')
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: 'Something went wrong',
+			});
+		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+			error,
+			message: 'Something went wrong',
+		});
+	}
 });
 
 module.exports = router;
