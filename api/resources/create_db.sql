@@ -16,8 +16,9 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS notes (
 	note_id uuid DEFAULT uuid_generate_v4(),
-	title TEXT,
 	author uuid NOT NULL,
+	title TEXT,
+	current_content TEXT,
 	PRIMARY KEY (note_id),
 	CONSTRAINT fk_notes_user FOREIGN KEY (author) REFERENCES users(user_id)
 );
