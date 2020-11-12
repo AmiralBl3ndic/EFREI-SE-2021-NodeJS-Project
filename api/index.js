@@ -9,8 +9,10 @@ const routes = require('./routes/root.route');
 
 const app = express();
 
-app.use('/docs', swaggerUI.serve, swaggerUI.setup(openAPISpecs));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(openAPISpecs));
 app.use('/', routes);
 
 app.use((req, res, next) => {
