@@ -71,6 +71,16 @@ components:
               - $ref: '#/components/schemas/UserNotFoundResponseData'
               - $ref: '#/components/schemas/NoteNotFoundResponseData'
 
+    UserOrNoteOrRevisionNotFound:
+      description: User or Note or Revision not found
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/UserNotFoundResponseData'
+              - $ref: '#/components/schemas/NoteNotFoundResponseData'
+              - $ref: '#/components/schemas/RevisionNotFoundResponseData'
+
   schemas:
     UserRegistrationData:
       description: Data required to create a user account
@@ -186,6 +196,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Modification'
+        message:
+          type: string
+          description: Short description of what the revision is about
 
     Modification:
       type: object
@@ -220,6 +233,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Modification'
+        message:
+          type: string
+          description: Short description of what the revision is about
+      required:
+        - changes
 
     UserNotFoundResponseData:
       type: object
@@ -246,6 +264,18 @@ components:
             - Note not found
           example: 'Note not found'
 
+    RevisionNotFoundResponseData:
+      type: object
+      properties:
+        hash:
+          type: string
+          description: ID of the revision access was attempted to
+        reason:
+          type: string
+          enum:
+            - 'Revision not found'
+          example: 'Revision not found'
+
   parameters:
     pathUsername:
       in: path
@@ -258,6 +288,13 @@ components:
     pathNoteId:
       in: path
       name: noteId
+      schema:
+        type: string
+      required: true
+
+    pathRevisionHash:
+      in: path
+      name: revisionHash
       schema:
         type: string
       required: true
@@ -648,3 +685,61 @@ paths:
           $ref: '#/components/responses/Forbidden'
         404:
           $ref: '#/components/responses/UserOrNoteNotFound'
+
+  # Single revision
+  /users/{username}/notes/{noteId}/revisions/{revisionHash}:
+    get:
+      description: Get a single revision
+      operationId: getUserNoteRevision
+      tags:
+        - Users
+        - Notes
+        - Revisions
+      parameters:
+        - $ref: '#/components/parameters/pathUsername'
+        - $ref: '#/components/parameters/pathNoteId'
+        - $ref: '#/components/parameters/pathRevisionHash'
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Revision details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Revision'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/UserOrNoteOrRevisionNotFound'
+
+    delete:
+      description: Delete a revision
+      operationId: deleteUserNoteRevision
+      tags:
+        - Users
+        - Notes
+        - Revisions
+      parameters:
+        - $ref: '#/components/parameters/pathUsername'
+        - $ref: '#/components/parameters/pathNoteId'
+        - $ref: '#/components/parameters/pathRevisionHash'
+        - in: query
+          name: revert
+          description: Whether to revert the revision if it is the last to impact some lines, defaults to false
+          schema:
+            type: boolean
+          required: false
+      security:
+        - bearerAuth: []
+      responses:
+        204:
+          description: Revision deleted
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/UserOrNoteOrRevisionNotFound'
