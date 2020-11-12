@@ -213,6 +213,14 @@ components:
       required:
         - title
 
+    NewRevision:
+      type: object
+      properties:
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Modification'
+
     UserNotFoundResponseData:
       type: object
       properties:
@@ -600,6 +608,40 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Revision'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/UserOrNoteNotFound'
+
+    post:
+      description: Add note revision
+      operationId: addUserNoteRevision
+      tags:
+        - Users
+        - Notes
+        - Revisions
+      parameters:
+        - $ref: '#/components/parameters/pathUsername'
+        - $ref: '#/components/parameters/pathNoteId'
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewRevision'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewRevision'
+      responses:
+        201:
+          description: Revision created and stored
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Revision'
         401:
           $ref: '#/components/responses/Unauthorized'
         403:
