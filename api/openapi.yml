@@ -48,22 +48,28 @@ components:
             username: '$response.body#/username'
           description: Get the user's data
 
+    UserNotFound:
+      description: User not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NoteNotFoundResponseData'
+
     NoteNotFound:
       description: Note not found
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              id:
-                type: string
-                description: ID of the note access was attempted to
-                example: 'h6gT68p'
-              reason:
-                type: string
-                enum:
-                  - Note not found
-                example: 'Note not found'
+            $ref: '#/components/schemas/NoteNotFoundResponseData'
+
+    UserOrNoteNotFound:
+      description: User or Note not found
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/UserNotFoundResponseData'
+              - $ref: '#/components/schemas/NoteNotFoundResponseData'
 
   schemas:
     UserRegistrationData:
@@ -207,6 +213,31 @@ components:
       required:
         - title
 
+    UserNotFoundResponseData:
+      type: object
+      properties:
+        username:
+          description: Username which no user can be found with
+          type: string
+          example: 'AgentSmith'
+        reason:
+          type: string
+          enum:
+            - 'User not found'
+
+    NoteNotFoundResponseData:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the note access was attempted to
+          example: 'h6gT68p'
+        reason:
+          type: string
+          enum:
+            - Note not found
+          example: 'Note not found'
+
   parameters:
     pathUsername:
       in: path
@@ -303,20 +334,7 @@ paths:
                     enum:
                       - 'Wrong credentials'
         404:
-          description: User not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  username:
-                    description: Username which no user can be found with
-                    type: string
-                    example: 'AgentSmith'
-                  reason:
-                    type: string
-                    enum:
-                      - 'User not found'
+          $ref: '#/components/responses/UserNotFound'
 
   ################################################################
   # Users routes
@@ -349,6 +367,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         403:
           $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/UserNotFound'
 
   # User's notes
   /users/{username}/notes:
@@ -442,6 +462,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         403:
           $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/UserNotFound'
 
   # Note data
   /users/{username}/notes/{noteId}:
@@ -491,7 +513,7 @@ paths:
         403:
           $ref: '#/components/responses/Forbidden'
         404:
-          $ref: '#/components/responses/NoteNotFound'
+          $ref: '#/components/responses/UserOrNoteNotFound'
 
     delete:
       description: Delete a note
@@ -554,3 +576,33 @@ paths:
           $ref: '#/components/responses/Forbidden'
         404:
           $ref: '#/components/responses/NoteNotFound'
+
+  # Note revisions
+  /users/{username}/notes/{noteId}/revisions:
+    get:
+      description: Get note revisions
+      operationId: getUserNoteRevisions
+      tags:
+        - Users
+        - Notes
+        - Revisions
+      parameters:
+        - $ref: '#/components/parameters/pathUsername'
+        - $ref: '#/components/parameters/pathNoteId'
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Note revisions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Revision'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/UserOrNoteNotFound'
