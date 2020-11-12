@@ -15,3 +15,6 @@ class AuthService {
 		return argon2.hash(password);
 	}
 }
+
+module.exports = AuthService;
+module.exports.hashPassword = AuthService.hashPassword;
