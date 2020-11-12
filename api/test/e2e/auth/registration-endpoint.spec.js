@@ -56,7 +56,7 @@ describe(`POST ${endpoint}`, () => {
 				// eslint-disable-next-line no-unused-expressions
 				expect(err).to.not.be.ok;
 				expect(res).to.have.status(StatusCodes.BAD_REQUEST);
-				expect(res.body).to.equal('Missing username parameter');
+				expect(res.body.reason).to.equal('Missing username parameter');
 				done();
 			});
 	});
@@ -68,7 +68,7 @@ describe(`POST ${endpoint}`, () => {
 				// eslint-disable-next-line no-unused-expressions
 				expect(err).to.not.be.ok;
 				expect(res).to.have.status(StatusCodes.BAD_REQUEST);
-				expect(res.body).to.equal('Missing email parameter');
+				expect(res.body.reason).to.equal('Missing email parameter');
 				done();
 			});
 	});
@@ -80,7 +80,7 @@ describe(`POST ${endpoint}`, () => {
 				// eslint-disable-next-line no-unused-expressions
 				expect(err).to.not.be.ok;
 				expect(res).to.have.status(StatusCodes.BAD_REQUEST);
-				expect(res.body).to.equal('Missing password parameter');
+				expect(res.body.reason).to.equal('Missing password parameter');
 				done();
 			});
 	});

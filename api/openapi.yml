@@ -364,12 +364,19 @@ paths:
           content:
             application/json:
               schema:
-                type: string
-                enum:
-                  - Missing username parameter
-                  - Missing email parameter
-                  - Missing password parameter
-                description: Reason of request rejection
+                type: object
+                properties:
+                  reason:
+                    type: string
+                    enum:
+                      - Missing username parameter
+                      - Missing email parameter
+                      - Missing password parameter
+                      - Username must be set
+                      - Email must be set
+                      - Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit and a special character
+                      - Invalid email format
+                    description: Reason of request rejection
         409:
           description: Username or email already in use by another user
           content:
