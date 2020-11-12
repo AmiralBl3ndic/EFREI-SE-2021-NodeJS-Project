@@ -48,6 +48,23 @@ components:
             username: '$response.body#/username'
           description: Get the user's data
 
+    NoteNotFound:
+      description: Note not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                description: ID of the note access was attempted to
+                example: 'h6gT68p'
+              reason:
+                type: string
+                enum:
+                  - Note not found
+                example: 'Note not found'
+
   schemas:
     UserRegistrationData:
       description: Data required to create a user account
@@ -56,7 +73,7 @@ components:
         username:
           description: Unique identifier of the user, will serve as a login credential
           type: string
-          pattern: '^[a-zA-Z0-9-_]$'
+          pattern: '^[a-zA-Z0-9-_]+$'
           example: 'H4ckerman'
         password:
           description: Password for the user, will serve as the second half of the login credentials
@@ -91,7 +108,7 @@ components:
         username:
           description: Username of the user to log in
           type: string
-          pattern: '^[a-zA-Z0-9-_]$'
+          pattern: '^[a-zA-Z0-9-_]+$'
           example: 'H4ckerman'
         password:
           description: Password of the user to log in
@@ -189,6 +206,22 @@ components:
           example: "Explain Kubernetes like I'm five"
       required:
         - title
+
+  parameters:
+    pathUsername:
+      in: path
+      name: username
+      schema:
+        type: string
+        pattern: '^[a-zA-Z0-9-_]+$'
+      required: true
+
+    pathNoteId:
+      in: path
+      name: noteId
+      schema:
+        type: string
+      required: true
 
 paths:
   ################################################################
@@ -416,16 +449,8 @@ paths:
         - Users
         - Notes
       parameters:
-        - name: username
-          in: path
-          schema:
-            type: string
-          required: true
-        - name: noteId
-          in: path
-          schema:
-            type: string
-          required: true
+        - $ref: '#/components/parameters/pathUsername'
+        - $ref: '#/components/parameters/pathNoteId'
       responses:
         200:
           description: Note exists
@@ -461,18 +486,22 @@ paths:
         403:
           $ref: '#/components/responses/Forbidden'
         404:
-          description: Note not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: ID of the note access was attempted to
-                    example: 'h6gT68p'
-                  reason:
-                    type: string
-                    enum:
-                      - Note not found
-                    example: 'Note not found'
+          $ref: '#/components/responses/NoteNotFound'
+
+    delete:
+      description: Delete a note
+      tags:
+        - Users
+        - Notes
+      parameters:
+        - $ref: '#/components/parameters/pathUsername'
+        - $ref: '#/components/parameters/pathNoteId'
+      responses:
+        204:
+          description: Note deleted
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NoteNotFound'
