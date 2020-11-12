@@ -1,5 +1,7 @@
 const supabase = require('../db');
 
+const AuthService = require('./auth.service');
+
 class UserService {
 	static async _findAllByField(field, value) {
 		const { data: userRecords, error } = await supabase
@@ -59,6 +61,31 @@ class UserService {
 		if (error) throw new Error(error);
 
 		return records.length > 0;
+	}
+
+	/**
+	 * Creates and persists a user record in the database with password hashing
+	 * @param {object} user User to create
+	 * @param {string} user.username Username of the user to create
+	 * @param {string} user.email Email of the user to create
+	 * @param {string} user.password Password of the user to create, will be hashed
+	 * @returns {object | null} User object if created, null otherwise
+	 * @throws {Error} in case of a supabase error
+	 */
+	static async create({ username, email, password }) {
+		const { data: user, error } = await supabase.from('users').insert([
+			{
+				email,
+				username,
+				password: await AuthService.hashPassword(password),
+			},
+		]);
+
+		if (error) throw new Error(error);
+
+		if (!user) return null;
+
+		return user;
 	}
 }
 
