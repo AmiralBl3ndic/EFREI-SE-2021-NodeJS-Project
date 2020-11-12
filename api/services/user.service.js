@@ -27,7 +27,7 @@ class UserService {
 	 * @throws In case of an error with supabase
 	 */
 	static findByUsername(username) {
-		return this._findOneByField('username', username);
+		return this._findOneByField('username', username.trim().toLowerCase());
 	}
 
 	/**
@@ -37,7 +37,28 @@ class UserService {
 	 * @throws In case of an error with supabase
 	 */
 	static findByEmail(email) {
-		return this._findOneByField('email', email);
+		return this._findOneByField('email', email.trim().toLowerCase());
+	}
+
+	/**
+	 * Check whether an email or a username is already used by an existing user
+	 * @param {string} email Email to check users for
+	 * @param {string} username Username to check users for
+	 * @returns {boolean} Whether a user record already uses given `username` or `password`
+	 * @throws In case of an error with supabase
+	 */
+	static async isEmailOrUsernameTaken(email, username) {
+		const emailToCheck = email.trim().toLowerCase();
+		const usernameToCheck = username.trim().toLowerCase();
+
+		const { data: records, error } = await supabase
+			.from('users')
+			.select('*')
+			.or(`email.eq.${emailToCheck},username.eq.${usernameToCheck}`);
+
+		if (error) throw new Error(error);
+
+		return records.length > 0;
 	}
 }
 
