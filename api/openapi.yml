@@ -5,9 +5,39 @@ info:
   description: API for the Notes versionner application
   version: 0.0.0
 
-basePath: /api
+servers:
+  - url: /api
+    description: Current environment
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    Unauthorized:
+      description: Access to route can only be granted through authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccessDeniedResource'
+
+    Forbidden:
+      description: Access is blocked because current user doesn't have the required privileges to access it
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccessDeniedResource'
+
+    SuccessfullLogin:
+      description: Login success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LoginSuccessData'
+
   schemas:
     UserRegistrationData:
       description: Data required to create a user account
@@ -16,18 +46,20 @@ components:
         username:
           description: Unique identifier of the user, will serve as a login credential
           type: string
-          required: true
+          pattern: '^[a-zA-Z0-9-_]$'
           example: 'H4ckerman'
         password:
           description: Password for the user, will serve as the second half of the login credentials
           type: string
-          required: true
           example: 'Sup3rStrongP4SsW0rd'
         email:
           description: Email adress of the user
           type: string
-          required: true
           example: 'john.doe@mail.com'
+      required:
+        - username
+        - password
+        - email
 
     LoginSuccessData:
       description: Login success data with an authentication token
@@ -49,12 +81,37 @@ components:
         username:
           description: Username of the user to log in
           type: string
+          pattern: '^[a-zA-Z0-9-_]$'
           example: 'H4ckerman'
-          required: true
         password:
           description: Password of the user to log in
           type: string
-          required: true
+      required:
+        - username
+        - password
+
+    AccessDeniedResource:
+      type: object
+      properties:
+        resource:
+          description: The resource access was attempted to
+          type: string
+
+    UserData:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Username of the user
+          example: 'H4ckerman'
+        email:
+          type: string
+          description: Email of the user
+          example: 'john.doe@mail.com'
+        uid:
+          type: string
+          description: Unique identifier of the user
+          example: 'PPBqWA9'
 
 paths:
   ################################################################
@@ -82,19 +139,16 @@ paths:
       requestBody:
         description: Registration data
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               $ref: '#/components/schemas/UserRegistrationData'
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               $ref: '#/components/schemas/UserRegistrationData'
       responses:
         201:
           description: Account created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LoginSuccessData'
+          $ref: '#/components/responses/SuccessfullLogin'
         409:
           description: Username or email already in use by another user
           content:
@@ -117,19 +171,15 @@ paths:
       requestBody:
         description: Login information
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               $ref: '#/components/schemas/LoginFormData'
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               $ref: '#/components/schemas/LoginFormData'
       responses:
         200:
-          description: Login successfull
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LoginSuccessData'
+          $ref: '#/components/responses/SuccessfullLogin'
         401:
           description: Wrong credentials combination
           content:
@@ -151,7 +201,38 @@ paths:
                   username:
                     description: Username which no user can be found with
                     type: string
+                    example: 'AgentSmith'
                   reason:
                     type: string
                     enum:
                       - 'User not found'
+
+  ################################################################
+  # Users routes
+  ################################################################
+
+  /users/{username}:
+    get:
+      description: Get the data associated to a user
+      tags:
+        - Users
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: User to read data of
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: User data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserData'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
