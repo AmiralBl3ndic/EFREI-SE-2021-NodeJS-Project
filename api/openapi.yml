@@ -179,6 +179,30 @@ components:
           type: string
           description: Last modification date for the note
 
+    NoteResume:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the note
+          example: '592g8hc'
+        link:
+          type: string
+          description: Link to the note
+          example: '/api/users/{username}/notes/592g8hc'
+        author:
+          type: string
+          description: Username of the user who created the note
+          example: 'H4ckerman'
+        title:
+          type: string
+          description: Title of the note
+          example: "Explain Kubernetes like I'm five"
+        lastModified:
+          type: string
+          description: Date of last modification of the note
+          example: '1605141362333'
+
     Revision:
       type: object
       properties:
@@ -382,6 +406,66 @@ paths:
           $ref: '#/components/responses/UserNotFound'
 
   ################################################################
+  # Search routes
+  ################################################################
+
+  /search/users:
+    get:
+      description: Search a user by username or email
+      operationId: searchUser
+      tags:
+        - Search
+        - Users
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+          required: true
+          description: Search criteria
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Search results
+          content:
+            application/json:
+              schema:
+                description: List of users matching search criteria
+                type: array
+                items:
+                  type: string
+                  description: Username of the found user
+
+  /search/notes:
+    get:
+      description: Search among notes the current authenticated user has access to
+      operationId: searchNotes
+      tags:
+        - Search
+        - Notes
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+          required: true
+          description: Search criteria
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Search results
+          content:
+            application/json:
+              schema:
+                description: List of notes current user has access to and matching search criteria
+                type: array
+                items:
+                  description: Condensed note object
+                  $ref: '#/components/schemas/NoteResume'
+
+  ################################################################
   # Users routes
   ################################################################
 
@@ -433,26 +517,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      description: Unique identifier of the note
-                      example: '592g8hc'
-                    link:
-                      type: string
-                      description: Link to the note
-                      example: '/api/users/{username}/notes/592g8hc'
-                    title:
-                      type: string
-                      description: Title of the note
-                      example: "Explain Kubernetes like I'm five"
-                    lastModified:
-                      type: string
-                      description: Date of last modification of the note
-                      example: '1605141362333'
+                $ref: '#/components/schemas/NoteResume'
         401:
           $ref: '#/components/responses/Unauthorized'
         403:
