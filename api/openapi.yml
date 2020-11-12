@@ -390,6 +390,19 @@ paths:
                     enum:
                       - 'Username already used by another user'
                       - 'Email already used by another user'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    description: Short description of what went wrong server-side
+                    type: string
+                    enum:
+                      - 'Something went wrong'
+                      - 'Unable to create user'
 
   /auth/login:
     post:
