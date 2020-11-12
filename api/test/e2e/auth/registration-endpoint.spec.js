@@ -99,7 +99,7 @@ describe(`POST ${endpoint}`, () => {
 			.end((err, res) => {
 				// eslint-disable-next-line no-unused-expressions
 				expect(err).to.not.be.ok;
-				expect(res).to.have.status(StatusCodes.OK);
+				expect(res).to.have.status(StatusCodes.CREATED);
 
 				generateApiCall()
 					.send({
