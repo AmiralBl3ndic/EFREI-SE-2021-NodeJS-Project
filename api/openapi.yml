@@ -128,6 +128,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Revision'
+        title:
+          type: string
+          description: Title of the note
+          example: "Explain Kubernetes like I'm five"
+        lastModified:
+          type: string
+          description: Last modification date for the note
 
     Revision:
       type: object
@@ -282,6 +289,50 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserData'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+
+  /users/{username}/notes:
+    get:
+      description: Get the notes titles and IDs a user owns
+      tags:
+        - Users
+        - Notes
+      parameters:
+        - name: username
+          in: path
+          schema:
+            type: string
+          description: Username of the user to get the notes of
+          required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Unique identifier of the note
+                      example: '592g8hc'
+                    link:
+                      type: string
+                      description: Link to the note
+                      example: '/api/users/{username}/notes/592g8hc'
+                    title:
+                      type: string
+                      description: Title of the note
+                      example: "Explain Kubernetes like I'm five"
+                    lastModified:
+                      type: string
+                      description: Date of last modification of the note
+                      example: '1605141362333'
         401:
           $ref: '#/components/responses/Unauthorized'
         403:
