@@ -1,4 +1,6 @@
 const argon2 = require('argon2');
+const jwt = require('jsonwebtoken');
+const { jwtSecret } = require('../config');
 
 class AuthService {
 	/**
@@ -13,6 +15,10 @@ class AuthService {
 		}
 
 		return argon2.hash(password);
+	}
+
+	static issueJwt(username) {
+		return jwt.sign({ sub: username }, jwtSecret);
 	}
 }
 
