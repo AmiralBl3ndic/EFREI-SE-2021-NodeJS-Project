@@ -23,6 +23,10 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/AccessDeniedResource'
+      links:
+        Login:
+          operationId: login
+          description: Log into an account to access the resource
 
     Forbidden:
       description: Access is blocked because current user doesn't have the required privileges to access it
@@ -37,6 +41,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/LoginSuccessData'
+      links:
+        GetUserData:
+          operationId: getUserData
+          parameters:
+            username: '$response.body#/username'
+          description: Get the user's data
 
   schemas:
     UserRegistrationData:
@@ -233,6 +243,7 @@ paths:
   /auth/login:
     post:
       description: Login to an existing account
+      operationId: login
       tags:
         - Auth
       requestBody:
@@ -282,6 +293,7 @@ paths:
   /users/{username}:
     get:
       description: Get the data associated to a user
+      operationId: getUserData
       tags:
         - Users
       parameters:
@@ -384,6 +396,12 @@ paths:
                     type: string
                     description: Title of the note
                     example: "Explain Kubernetes like I'm five"
+          links:
+            GetNewlyCreatedNote:
+              operationId: getUserNote
+              parameters:
+                username: '$request.path#/username'
+                noteId: '$response.body/#id'
         401:
           $ref: '#/components/responses/Unauthorized'
         403:
