@@ -113,6 +113,56 @@ components:
           description: Unique identifier of the user
           example: 'PPBqWA9'
 
+    Note:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the note
+          example: 'cj7jQR'
+        author:
+          type: string
+          description: User who created and owns the note
+          example: 'H4ckerman'
+        revisions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Revision'
+
+    Revision:
+      type: object
+      properties:
+        hash:
+          type: string
+          description: Unique identifier of the revision
+        timestamp:
+          type: string
+          description: Time of the revision (temporal marker)
+        username:
+          type: string
+          description: Name of the user issuing the revision
+          example: 'H4ckerman'
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Modification'
+
+    Modification:
+      type: object
+      properties:
+        position:
+          type: integer
+          description: position/line in the note
+          example: 4
+        before:
+          type: string
+          description: Previous state of the affected line
+          example: '*This was italic text before*'
+        after:
+          type: string
+          description: State of the affected line after the modification
+          example: '**This was italic text before, now it is bold text**'
+
 paths:
   ################################################################
   # Documentation routes
