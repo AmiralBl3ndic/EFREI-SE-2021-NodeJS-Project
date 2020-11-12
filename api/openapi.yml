@@ -354,16 +354,14 @@ paths:
   /users/{username}/notes:
     get:
       description: Get the notes titles and IDs a user owns
+      operationId: getUserNotes
       tags:
         - Users
         - Notes
       parameters:
-        - name: username
-          in: path
-          schema:
-            type: string
-          description: Username of the user to get the notes of
-          required: true
+        - $ref: '#/components/parameters/pathUsername'
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: Success
@@ -397,9 +395,14 @@ paths:
 
     post:
       description: Create a note for a user
+      operationId: createUserNote
       tags:
         - Users
         - Notes
+      parameters:
+        - $ref: '#/components/parameters/pathUsername'
+      security:
+        - bearerAuth: []
       requestBody:
         description: Note to be added
         content:
@@ -451,6 +454,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/pathUsername'
         - $ref: '#/components/parameters/pathNoteId'
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: Note exists
@@ -490,12 +495,15 @@ paths:
 
     delete:
       description: Delete a note
+      operationId: deleteUserNote
       tags:
         - Users
         - Notes
       parameters:
         - $ref: '#/components/parameters/pathUsername'
         - $ref: '#/components/parameters/pathNoteId'
+      security:
+        - bearerAuth: []
       responses:
         204:
           description: Note deleted
@@ -508,12 +516,15 @@ paths:
 
     patch:
       description: Update the title of the note
+      operationId: updateUserNotTitle
       tags:
         - Users
         - Notes
       parameters:
         - $ref: '#/components/parameters/pathUsername'
         - $ref: '#/components/parameters/pathNoteId'
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/x-www-form-urlencoded:
