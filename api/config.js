@@ -11,7 +11,15 @@ const defaultPort = 3000;
 ////////////////////////////////////////////////////////////
 // Verify required environment variables are set
 ////////////////////////////////////////////////////////////
-const requiredEnvVariables = [];
+const requiredEnvVariables = [
+	'SUPABASE_URL',
+	'SUPABASE_PUBLIC_KEY',
+	'SUPABASE_DB_HOST',
+	'SUPABASE_DB_NAME',
+	'SUPABASE_DB_PORT',
+	'SUPABASE_DB_USER',
+	'SUPABASE_DB_PASSWORD',
+];
 
 // Check that each required variable is set with a value that is not null nor undefined
 requiredEnvVariables.forEach((variable) => {
@@ -28,6 +36,13 @@ requiredEnvVariables.forEach((variable) => {
 // Compute actual configuration values
 ////////////////////////////////////////////////////////////
 const port = +process.env.PORT || defaultPort;
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabasePublicKey = process.env.SUPABASE_PUBLIC_KEY;
+const supabaseDbHost = process.env.SUPABASE_DB_HOST;
+const supabaseDbName = process.env.SUPABASE_DB_NAME;
+const supabaseDbPort = process.env.SUPABASE_DB_PORT;
+const supabaseDbUser = process.env.SUPABASE_DB_USER;
+const supabaseDbPassword = process.env.SUPABASE_DB_PASSWORD;
 
 ////////////////////////////////////////////////////////////
 // Exports
@@ -35,6 +50,20 @@ const port = +process.env.PORT || defaultPort;
 
 module.exports = {
 	port,
+	supabaseUrl,
+	supabasePublicKey,
+	supabaseDbHost,
+	supabaseDbName,
+	supabaseDbPort,
+	supabaseDbUser,
+	supabaseDbPassword,
 };
 
 module.exports.port = port;
+module.exports.supabaseUrl = supabaseUrl;
+module.exports.supabasePublicKey = supabasePublicKey;
+module.exports.supabaseDbHost = supabaseDbHost;
+module.exports.supabaseDbName = supabaseDbName;
+module.exports.supabaseDbPort = supabaseDbPort;
+module.exports.supabaseDbUser = supabaseDbUser;
+module.exports.supabaseDbPassword = supabaseDbPassword;
