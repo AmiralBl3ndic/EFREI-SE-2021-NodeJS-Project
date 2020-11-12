@@ -170,6 +170,16 @@ components:
           description: State of the affected line after the modification
           example: '**This was italic text before, now it is bold text**'
 
+    NewNoteForm:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the note to create
+          example: "Explain Kubernetes like I'm five"
+      required:
+        - title
+
 paths:
   ################################################################
   # Documentation routes
@@ -268,6 +278,7 @@ paths:
   # Users routes
   ################################################################
 
+  # User's data
   /users/{username}:
     get:
       description: Get the data associated to a user
@@ -294,6 +305,7 @@ paths:
         403:
           $ref: '#/components/responses/Forbidden'
 
+  # User's notes
   /users/{username}/notes:
     get:
       description: Get the notes titles and IDs a user owns
@@ -333,6 +345,45 @@ paths:
                       type: string
                       description: Date of last modification of the note
                       example: '1605141362333'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+
+    post:
+      description: Create a note for a user
+      tags:
+        - Users
+        - Notes
+      requestBody:
+        description: Note to be added
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewNoteForm'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewNoteForm'
+      responses:
+        201:
+          description: Note created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier of the note
+                    example: '592g8hc'
+                  link:
+                    type: string
+                    description: Link to the note
+                    example: '/api/users/{username}/notes/592g8hc'
+                  title:
+                    type: string
+                    description: Title of the note
+                    example: "Explain Kubernetes like I'm five"
         401:
           $ref: '#/components/responses/Unauthorized'
         403:
