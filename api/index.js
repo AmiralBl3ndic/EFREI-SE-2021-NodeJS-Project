@@ -5,10 +5,13 @@ const swaggerUI = require('swagger-ui-express');
 const { StatusCodes, getReasonPhrase } = require('http-status-codes');
 
 const openAPISpecs = require('yamljs').load('./api/openapi.yml');
+const routes = require('./routes/root.route');
 
 const app = express();
 
 app.use('/docs', swaggerUI.serve, swaggerUI.setup(openAPISpecs));
+
+app.use('/', routes);
 
 app.use((req, res, next) => {
 	res.status(StatusCodes.NOT_FOUND).json({
