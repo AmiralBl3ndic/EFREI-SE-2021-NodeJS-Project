@@ -1,27 +1,60 @@
-'use strict';
+// Config
+const { port } = require('./config');
 
-const express = require('express');
+// NextJS
+const dev = process.env.NODE_ENV !== 'production';
+const nextApp = require('next')({ dev });
+const nextHandler = nextApp.getRequestHandler();
+
+// Swagger
 const swaggerUI = require('swagger-ui-express');
-const { StatusCodes, getReasonPhrase } = require('http-status-codes');
 const openAPISpecs = require('yamljs').load('./api/openapi.yml');
 
-const configuredPassport = require('./auth/passport.config');
-const routes = require('./routes/root.route');
-
+// Express
+const express = require('express');
+const { StatusCodes, getReasonPhrase } = require('http-status-codes');
 const app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(configuredPassport.initialize());
+// Passport
+const configuredPassport = require('./auth/passport.config');
 
-app.use('/docs', swaggerUI.serve, swaggerUI.setup(openAPISpecs));
-app.use('/', routes);
+// Routes
+const apiRoutes = require('./routes/root.routes');
 
-app.use((req, res, next) => {
-	res.status(StatusCodes.NOT_FOUND).json({
-		code: StatusCodes.NOT_FOUND,
-		status: getReasonPhrase(StatusCodes.NOT_FOUND),
+////////////////////////////////////////////////////////////
+// Server bootstrap
+////////////////////////////////////////////////////////////
+nextApp
+	.prepare()
+	.then(() => {
+		////////////////////////////////////////////////////////////
+		// Express setup
+		////////////////////////////////////////////////////////////
+		app.use(express.json());
+		app.use(express.urlencoded({ extended: false }));
+		app.use(configuredPassport.initialize());
+
+		app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(openAPISpecs));
+		app.use('/api', apiRoutes);
+
+		app.get('*', nextHandler);
+
+		app.use((req, res, next) => {
+			res.status(StatusCodes.NOT_FOUND).json({
+				code: StatusCodes.NOT_FOUND,
+				status: getReasonPhrase(StatusCodes.NOT_FOUND),
+			});
+		});
+
+		app.listen(port, (error) => {
+			if (error) throw error;
+
+			console.log(`Server started and listening on port ${port}`);
+		});
+	})
+	.catch((error) => {
+		console.error('Something went wrong:', error);
+		process.exit(1);
 	});
-});
 
 module.exports = app;

@@ -1,44 +1,44 @@
 {
 	"name": "nodejs-m2-project",
 	"version": "1.0.0",
+	"main": "api/index.js",
 	"private": true,
 	"scripts": {
-		"dev": "nodemon --watch api --watch api/openapi.yml --exec \"nuxt\"",
-		"build": "nuxt build",
-		"start": "nuxt start",
-		"generate": "nuxt generate",
-		"lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
+		"dev": "nodemon --watch api -e js,json,yml .",
+		"build": "next build",
+		"start": "next start",
+		"lint:js": "eslint --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore .",
 		"lint": "yarn lint:js",
 		"test:api": "mocha \"api/**/*.spec.js\""
 	},
 	"dependencies": {
-		"@nuxtjs/axios": "^5.12.2",
 		"@supabase/supabase-js": "^1.0.3",
 		"argon2": "^0.27.0",
-		"core-js": "^3.6.5",
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
 		"http-status-codes": "^2.1.4",
 		"jsonwebtoken": "^8.5.1",
-		"nuxt": "^2.14.6",
+		"next": "^10.0.1",
 		"passport": "^0.4.1",
 		"passport-local": "^1.0.0",
+		"react": "^17.0.1",
+		"react-dom": "^17.0.1",
 		"swagger-ui-express": "^4.1.4",
 		"yamljs": "^0.3.0"
 	},
 	"devDependencies": {
-		"@nuxtjs/eslint-config": "^3.1.0",
-		"@nuxtjs/eslint-module": "^2.0.0",
-		"@nuxtjs/tailwindcss": "^3.1.0",
+		"@types/node": "^14.14.7",
+		"@types/react": "^16.9.56",
 		"babel-eslint": "^10.1.0",
 		"chai": "^4.2.0",
 		"chai-http": "^4.3.0",
 		"eslint": "^7.10.0",
 		"eslint-config-prettier": "^6.12.0",
-		"eslint-plugin-nuxt": "^1.0.0",
 		"eslint-plugin-prettier": "^3.1.4",
+		"eslint-plugin-react": "^7.21.5",
 		"mocha": "^8.2.1",
 		"nodemon": "^2.0.6",
-		"prettier": "^2.1.2"
+		"prettier": "^2.1.2",
+		"typescript": "^4.0.5"
 	}
 }
