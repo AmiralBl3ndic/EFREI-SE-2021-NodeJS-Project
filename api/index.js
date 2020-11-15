@@ -1,11 +1,21 @@
 'use strict';
 
+// NextJS
+const dev = process.env.NODE_ENV !== 'production';
+const nextApp = require('next')({ dev });
+
+// Express
 const express = require('express');
-const swaggerUI = require('swagger-ui-express');
 const { StatusCodes, getReasonPhrase } = require('http-status-codes');
+
+// Swagger
+const swaggerUI = require('swagger-ui-express');
 const openAPISpecs = require('yamljs').load('./api/openapi.yml');
 
+// Passport
 const configuredPassport = require('./auth/passport.config');
+
+// Routes
 const routes = require('./routes/root.route');
 
 const app = express();
