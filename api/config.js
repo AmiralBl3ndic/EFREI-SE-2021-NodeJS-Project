@@ -19,6 +19,7 @@ const requiredEnvVariables = [
 	'SUPABASE_DB_PORT',
 	'SUPABASE_DB_USER',
 	'SUPABASE_DB_PASSWORD',
+	'JWT_SECRET',
 ];
 
 // Check that each required variable is set with a value that is not null nor undefined
@@ -43,6 +44,7 @@ const supabaseDbName = process.env.SUPABASE_DB_NAME;
 const supabaseDbPort = process.env.SUPABASE_DB_PORT;
 const supabaseDbUser = process.env.SUPABASE_DB_USER;
 const supabaseDbPassword = process.env.SUPABASE_DB_PASSWORD;
+const jwtSecret = process.env.JWT_SECRET;
 
 ////////////////////////////////////////////////////////////
 // Exports
@@ -57,6 +59,7 @@ module.exports = {
 	supabaseDbPort,
 	supabaseDbUser,
 	supabaseDbPassword,
+	jwtSecret,
 };
 
 module.exports.port = port;
@@ -67,3 +70,4 @@ module.exports.supabaseDbName = supabaseDbName;
 module.exports.supabaseDbPort = supabaseDbPort;
 module.exports.supabaseDbUser = supabaseDbUser;
 module.exports.supabaseDbPassword = supabaseDbPassword;
+module.exports.jwtSecret = jwtSecret;
