@@ -1,25 +1,6 @@
-// Config
+const nextApp = require('next')({ dev: process.env.NODE_ENV !== 'production' });
+const app = require('./server');
 const { port } = require('./config');
-
-// NextJS
-const dev = process.env.NODE_ENV !== 'production';
-const nextApp = require('next')({ dev });
-const nextHandler = nextApp.getRequestHandler();
-
-// Swagger
-const swaggerUI = require('swagger-ui-express');
-const openAPISpecs = require('yamljs').load('./api/openapi.yml');
-
-// Express
-const express = require('express');
-const { StatusCodes, getReasonPhrase } = require('http-status-codes');
-const app = express();
-
-// Passport
-const configuredPassport = require('./auth/passport.config');
-
-// Routes
-const apiRoutes = require('./routes/root.routes');
 
 ////////////////////////////////////////////////////////////
 // Server bootstrap
@@ -27,18 +8,10 @@ const apiRoutes = require('./routes/root.routes');
 nextApp
 	.prepare()
 	.then(() => {
-		////////////////////////////////////////////////////////////
-		// Express setup
-		////////////////////////////////////////////////////////////
-		app.use(express.json());
-		app.use(express.urlencoded({ extended: false }));
-		app.use(configuredPassport.initialize());
+		// Handle HTTP GET requests to be passed to NextJS
+		app.get('*', nextApp.getRequestHandler());
 
-		app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(openAPISpecs));
-		app.use('/api', apiRoutes);
-
-		app.get('*', nextHandler);
-
+		// Handle all HTTP requests which have not received a response and send a HTTP 404 response
 		app.use((req, res, next) => {
 			res.status(StatusCodes.NOT_FOUND).json({
 				code: StatusCodes.NOT_FOUND,
@@ -46,6 +19,7 @@ nextApp
 			});
 		});
 
+		// Actually start listening for HTTP requests on configured port
 		app.listen(port, (error) => {
 			if (error) throw error;
 

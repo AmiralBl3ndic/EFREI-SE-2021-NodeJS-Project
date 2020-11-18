@@ -1,12 +1,12 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const { StatusCodes } = require('http-status-codes');
-const api = require('../../../index');
+const api = require('../../../server');
 
 const { expect } = chai;
 chai.use(chaiHttp);
 
-const endpoint = '/auth/register';
+const endpoint = '/api/auth/register';
 
 function generateApiCall() {
 	return chai
