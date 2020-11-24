@@ -1,11 +1,22 @@
+import Axios from 'axios';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
 const LoginForm = () => {
 	const { register, handleSubmit, watch, errors } = useForm();
-	const onSubmit = (data) => console.log(data);
+	const [user, setUser] = React.useState('');
+	const [password, setPassword] = React.useState('');
 
-	console.log(watch('example')); // watch input value by passing the name of it
+	const onSubmit = (data) => {
+		setUser(data.username);
+		setPassword(data.password);
+		console.log(data);
+
+		Axios.post('/auth/login', {
+			username: user,
+			password: password,
+		});
+	};
 
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -16,7 +27,6 @@ const LoginForm = () => {
 						src="http://placedelacomedie.com/wp-content/uploads/2017/07/Ricard_logo.png"
 						alt="Workflow"
 					/>
-					<br />
 					<h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
 						Sign in to your account
 					</h2>
@@ -27,14 +37,9 @@ const LoginForm = () => {
 					<input type="hidden" name="remember" value="true" />
 					<div className="rounded-md shadow-sm -space-y-px">
 						<div>
-							<label htmlFor="email-address" className="sr-only">
-								Email address
-							</label>
+							<label className="sr-only">Email address</label>
 							<input
-								id="email-address"
-								name="email"
-								type="email"
-								required
+								name="username"
 								className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
 								placeholder="Email address"
 								ref={register({ required: true })}
@@ -45,7 +50,6 @@ const LoginForm = () => {
 								Password
 							</label>
 							<input
-								id="password"
 								name="password"
 								type="password"
 								required
@@ -55,8 +59,6 @@ const LoginForm = () => {
 							/>
 						</div>
 					</div>
-
-					{errors.exampleRequired && <span>This field is required</span>}
 
 					<br />
 					<div>
