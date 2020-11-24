@@ -24,6 +24,7 @@
 		"passport-local": "^1.0.0",
 		"react": "^17.0.1",
 		"react-dom": "^17.0.1",
+		"react-hook-form": "^6.11.5",
 		"swagger-ui-express": "^4.1.4",
 		"yamljs": "^0.3.0"
 	},
