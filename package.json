@@ -15,6 +15,7 @@
 		"@supabase/supabase-js": "^1.0.3",
 		"@windmill/react-ui": "^0.4.1",
 		"argon2": "^0.27.0",
+		"axios": "^0.21.0",
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
 		"http-status-codes": "^2.1.4",
