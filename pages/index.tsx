@@ -6,7 +6,18 @@ import LoginForm from '../components/LoginForm';
 const Index: NextPage = () => {
 	return (
 		<>
-			<div className="grid">
+			<div className="container mx-auto">
+				<LoginForm />
+			</div>
+		</>
+	);
+};
+
+export default Index;
+
+/*
+
+<div className="grid">
 				<div className="welcomeArea">
 					<p>
 						Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis ad
@@ -20,8 +31,5 @@ const Index: NextPage = () => {
 					<Alert type="warning">Lorem ipsum dolor sit</Alert>
 				</div>
 			</div>
-		</>
-	);
-};
 
-export default Index;
+			*/
