@@ -1,0 +1,20 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.grid > div {
+	background-color: grey;
+	border: solid 1px black;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: 10fr 10fr;
+	grid-template-rows: 800px;
+	grid-column-gap: 20px;
+}
+
+.welcomeArea {
+	align-items: center;
+}
