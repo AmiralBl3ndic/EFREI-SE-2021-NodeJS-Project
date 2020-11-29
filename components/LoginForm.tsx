@@ -12,7 +12,7 @@ const LoginForm = () => {
 		setPassword(data.password);
 		console.log(data);
 
-		Axios.post('/auth/login', {
+		Axios.post('/auth/register', {
 			username: user,
 			password: password,
 		});

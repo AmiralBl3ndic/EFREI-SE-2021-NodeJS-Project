@@ -5,16 +5,19 @@ import { useForm } from 'react-hook-form';
 const RegisterForm = () => {
 	const { register, handleSubmit } = useForm();
 	const [user, setUser] = React.useState('');
+	const [mail, setMail] = React.useState('');
 	const [password, setPassword] = React.useState('');
 
 	const onSubmit = (data) => {
 		setUser(data.username);
 		setPassword(data.password);
+		setMail(data.mail);
 		console.log(data);
 
 		Axios.post('/auth/login', {
 			username: user,
 			password: password,
+			mail: mail,
 		});
 	};
 
@@ -29,7 +32,7 @@ const RegisterForm = () => {
 							alt="Workflow"
 						/>
 						<h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-							Sign in to your account
+							Sign up to a new account
 						</h2>
 					</div>
 
@@ -37,6 +40,16 @@ const RegisterForm = () => {
 					<form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
 						<input type="hidden" name="remember" value="true" />
 						<div className="rounded-md shadow-sm -space-y-px">
+							<div>
+								<label className="sr-only">User name</label>
+								<input
+									name="username"
+									className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+									placeholder="Username"
+									ref={register({ required: true })}
+								/>
+							</div>
+							<br />
 							<div>
 								<label className="sr-only">Email address</label>
 								<input
@@ -46,6 +59,7 @@ const RegisterForm = () => {
 									ref={register({ required: true })}
 								/>
 							</div>
+							<br />
 							<div>
 								<label htmlFor="password" className="sr-only">
 									Password
