@@ -3,7 +3,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 const LoginForm = () => {
-	const { register, handleSubmit, watch, errors } = useForm();
+	const { register, handleSubmit } = useForm();
 	const [user, setUser] = React.useState('');
 	const [password, setPassword] = React.useState('');
 
