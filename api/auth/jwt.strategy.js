@@ -1,4 +1,4 @@
-const { JwtStrategy, ExtractJwt } = require('passport-jwt');
+const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
 const UserService = require('../services/user.service');
 
 module.exports = new JwtStrategy(
@@ -6,7 +6,7 @@ module.exports = new JwtStrategy(
 		jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 		secretOrKey: process.env.JWT_SECRET,
 	},
-	({ username }, done) => {
+	async ({ username }, done) => {
 		try {
 			const user = await UserService.findByUsername(username);
 
