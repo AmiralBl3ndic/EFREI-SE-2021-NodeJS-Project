@@ -6,9 +6,11 @@ module.exports = new JwtStrategy(
 		jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 		secretOrKey: process.env.JWT_SECRET,
 	},
-	async ({ username }, done) => {
+	async ({ sub }, done) => {
+		if (!sub) return done(null, false);
+
 		try {
-			const user = await UserService.findByUsername(username);
+			const user = await UserService.findByUsername(sub);
 
 			if (!user) return done(null, false, { message: 'User not found' });
 

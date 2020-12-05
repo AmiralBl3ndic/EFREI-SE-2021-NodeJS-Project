@@ -56,10 +56,11 @@ CREATE VIEW user_notes_with_rights AS
 	SELECT
 		u.username,
 		u.email,
-		nac.can_read,
-		nac.can_write,
+		n.note_id,
 		n.title,
-		n.current_content
+		n.current_content,
+		nac.can_read,
+		nac.can_write
 	FROM
 		notes_access_control nac
 	LEFT JOIN
