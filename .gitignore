@@ -88,3 +88,13 @@ sw.*
 
 # Vim swap files
 *.swp
+``
+
+# Yarn 2
+.pnp*
+.yarn/*
+.yarn/cache
+.yarn/releases
+.yarn/plugins
+.yarn/sdks
+.yarn/versions
