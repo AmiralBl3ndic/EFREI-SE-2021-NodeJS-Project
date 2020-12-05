@@ -1,6 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-DROP TABLE IF EXISTS notes_access;
+DROP TABLE IF EXISTS notes_access_control;
 DROP TABLE IF EXISTS modifications;
 DROP TABLE IF EXISTS revisions;
 DROP TABLE IF EXISTS notes;
@@ -40,10 +40,12 @@ CREATE TABLE IF NOT EXISTS modifications (
 	CONSTRAINT fk_modifications_revisions FOREIGN KEY (revision) REFERENCES revisions(revision_id)
 );
 
--- Many to many relationship
-CREATE TABLE IF NOT EXISTS notes_access (
+
+CREATE TABLE IF NOT EXISTS notes_access_control (
 	user_id uuid NOT NULL,
 	note uuid NOT NULL,
+	can_read BOOLEAN DEFAULT false,
+	can_write BOOLEAN DEFAULT false,
 	PRIMARY KEY (user_id, note),
 	CONSTRAINT fk_notes_access_users FOREIGN KEY (user_id) REFERENCES users(user_id),
 	CONSTRAINT fk_notes_access_notes FOREIGN KEY (note) REFERENCES notes(note_id)
