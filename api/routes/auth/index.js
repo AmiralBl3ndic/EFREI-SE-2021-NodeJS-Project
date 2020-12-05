@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const passport = require('../../');
+const passport = require('../../auth/local.strategy');
 
 const registerRoutes = require('./register.routes');
 
