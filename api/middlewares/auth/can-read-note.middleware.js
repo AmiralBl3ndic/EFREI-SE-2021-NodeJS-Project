@@ -3,7 +3,6 @@ const supabase = require('../../db');
 
 /**
  * Checks whether the currently authenticated user can read a specific note
- * @param {uuid} noteId ID of the note to check reading rights of authenticated user
  */
 const canReadNote = async (req, res, next) => {
 	// Check if user is authenticated, reject if not
