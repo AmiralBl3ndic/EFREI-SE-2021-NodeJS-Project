@@ -2,6 +2,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const argon2 = require('argon2');
 
 const UserService = require('../services/user.service');
+const AuthService = require('../services/auth.service');
 
 module.exports = new LocalStrategy(
 	{ usernameField: 'username' },
@@ -12,6 +13,7 @@ module.exports = new LocalStrategy(
 			if (!user) return done(null, false, { message: 'User not found' });
 
 			if (await argon2.verify(user.password, password)) {
+				delete user.password;
 				return done(null, user);
 			}
 			return done(null, false, { message: 'Wrong password' });
