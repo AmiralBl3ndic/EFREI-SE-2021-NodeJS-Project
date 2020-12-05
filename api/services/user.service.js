@@ -25,7 +25,7 @@ class UserService {
 	/**
 	 * Look for a user record in the database by its username
 	 * @param {string} username Username of the user to look for
-	 * @returns {User | null} Found user record, null if not found
+	 * @returns {Promise<User | null>} Found user record, null if not found
 	 * @throws In case of an error with supabase
 	 */
 	static findByUsername(username) {
@@ -35,7 +35,7 @@ class UserService {
 	/**
 	 * Look for a user record in the database by its email
 	 * @param {string} email Username of the user to look for
-	 * @returns {User | null} Found user record, null if not found
+	 * @returns {Promise<User | null>} Found user record, null if not found
 	 * @throws In case of an error with supabase
 	 */
 	static findByEmail(email) {
