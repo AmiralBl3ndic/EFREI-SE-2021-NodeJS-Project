@@ -7,7 +7,7 @@ const registerRoutes = require('./register.routes');
 router.use('/register', registerRoutes);
 router.use(
 	'/login',
-	passport.authenticate('local', { session: false, failureFlash: true }),
+	passport.authenticate('local', { session: false }),
 	(req, res) => {
 		const token = AuthService.issueJwt(req.user.username);
 

@@ -53,7 +53,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/NoteNotFoundResponseData'
+            $ref: '#/components/schemas/UserNotFoundResponseData'
 
     NoteNotFound:
       description: Note not found
@@ -424,15 +424,6 @@ paths:
           $ref: '#/components/responses/SuccessfullLogin'
         401:
           description: Wrong credentials combination
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  reason:
-                    type: string
-                    enum:
-                      - 'Wrong credentials'
         404:
           $ref: '#/components/responses/UserNotFound'
 
