@@ -1,5 +1,6 @@
-const nextApp = require('next')({ dev: process.env.NODE_ENV !== 'production' });
 const { StatusCodes, getReasonPhrase } = require('http-status-codes');
+const nextApp = require('next')({ dev: process.env.NODE_ENV !== 'production' });
+const passport = require('./auth/passport.config');
 const app = require('./server');
 const { port } = require('./config');
 
@@ -9,6 +10,15 @@ const { port } = require('./config');
 nextApp
 	.prepare()
 	.then(() => {
+		app.get(
+			'/dashboard',
+			passport.authenticate('jwt', {
+				session: false,
+				failureRedirect: '/login',
+			}),
+			nextApp.getRequestHandler(),
+		);
+
 		// Handle HTTP GET requests to be passed to NextJS
 		app.get('*', nextApp.getRequestHandler());
 
