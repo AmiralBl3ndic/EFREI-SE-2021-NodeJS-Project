@@ -50,3 +50,24 @@ CREATE TABLE IF NOT EXISTS notes_access_control (
 	CONSTRAINT fk_notes_access_users FOREIGN KEY (user_id) REFERENCES users(user_id),
 	CONSTRAINT fk_notes_access_notes FOREIGN KEY (note) REFERENCES notes(note_id)
 );
+
+-- To view all notes all users have access to with respective access rights
+CREATE VIEW user_notes_with_rights AS
+	SELECT
+		u.username,
+		u.email,
+		nac.can_read,
+		nac.can_write,
+		n.title,
+		n.current_content
+	FROM
+		notes_access_control nac
+	LEFT JOIN
+		users u
+	ON
+		nac.user_id = u.user_id
+	LEFT JOIN
+		notes n
+	ON
+		nac.note = n.note_id;
+
