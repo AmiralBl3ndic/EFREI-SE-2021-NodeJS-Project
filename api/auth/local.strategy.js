@@ -16,7 +16,7 @@ module.exports = new LocalStrategy(
 				delete user.password;
 				return done(null, user);
 			}
-			return done(null, false, { message: 'Wrong password' });
+			return done(null, false, { message: 'Wrong credentials' });
 		} catch (error) {
 			return done(error);
 		}
