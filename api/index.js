@@ -1,4 +1,5 @@
 const nextApp = require('next')({ dev: process.env.NODE_ENV !== 'production' });
+const { StatusCodes, getReasonPhrase } = require('http-status-codes');
 const app = require('./server');
 const { port } = require('./config');
 
