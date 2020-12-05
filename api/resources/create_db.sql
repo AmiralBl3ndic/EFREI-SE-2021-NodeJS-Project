@@ -52,8 +52,9 @@ CREATE TABLE IF NOT EXISTS notes_access_control (
 );
 
 -- To view all notes all users have access to with respective access rights
-CREATE VIEW user_notes_with_rights AS
+CREATE OR REPLACE VIEW user_notes_with_rights AS
 	SELECT
+		u.user_id,
 		u.username,
 		u.email,
 		n.note_id,
