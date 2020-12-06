@@ -2,6 +2,7 @@ const { StatusCodes, getReasonPhrase } = require('http-status-codes');
 const nextApp = require('next')({ dev: process.env.NODE_ENV !== 'production' });
 const passport = require('./auth/passport.config');
 const app = require('./server');
+const { Sentry } = require('./server');
 const { port } = require('./config');
 
 ////////////////////////////////////////////////////////////
@@ -22,12 +23,18 @@ nextApp
 		// Handle HTTP GET requests to be passed to NextJS
 		app.get('*', nextApp.getRequestHandler());
 
+		app.use(Sentry.Handlers.errorHandler());
+
 		// Handle all HTTP requests which have not received a response and send a HTTP 404 response
 		app.use((req, res, next) => {
 			res.status(StatusCodes.NOT_FOUND).json({
 				code: StatusCodes.NOT_FOUND,
 				status: getReasonPhrase(StatusCodes.NOT_FOUND),
 			});
+		});
+
+		app.use((err, req, res, next) => {
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
 		});
 
 		// Actually start listening for HTTP requests on configured port
