@@ -86,10 +86,7 @@ router.post('/', validateRequest, async (req, res) => {
 	try {
 		const user = await UserService.create(req.body);
 
-		if (!user)
-			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-				message: 'Unable to create user',
-			});
+		if (!user) throw new Error('Unable to create user');
 
 		delete user.password;
 		req.session.user = user;
@@ -99,14 +96,7 @@ router.post('/', validateRequest, async (req, res) => {
 			token: AuthService.issueJwt(req.body.username),
 		});
 	} catch (error) {
-		if (process.env.NODE_ENV === 'production')
-			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-				message: 'Something went wrong',
-			});
-		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-			error,
-			message: 'Something went wrong',
-		});
+		throw new Error(error);
 	}
 });
 

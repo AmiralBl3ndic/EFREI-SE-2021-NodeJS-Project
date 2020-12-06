@@ -11,7 +11,7 @@ router.get('/:noteId', canReadNote, async (req, res) => {
 		.eq('note_id', req.params.noteId)
 		.limit(1);
 
-	if (error) return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
+	if (error) throw new Error(error.message);
 
 	return res.status(StatusCodes.OK).json(data[0]);
 });

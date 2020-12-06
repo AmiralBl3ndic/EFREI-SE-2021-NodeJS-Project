@@ -19,7 +19,7 @@ const canWriteNote = async (req, res, next) => {
 		.eq('note_id', req.params.noteId)
 		.limit(1);
 
-	if (error) return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
+	if (error) throw new Error(error.message);
 
 	// If no results or if no writing rights
 	if (data.length === 0 || !data[0].can_write)

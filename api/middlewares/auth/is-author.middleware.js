@@ -13,7 +13,7 @@ const isAuthor = async (req, res, next) => {
 		.eq('note_id', req.params.noteId)
 		.eq('author', req.user.id);
 
-	if (error) return new res.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
+	if (error) throw new Error('Unable to determine access rights');
 
 	if (!data || !data.length)
 		return res.status(StatusCodes.FORBIDDEN).json({
