@@ -1,9 +1,14 @@
+/**
+ * Represents an application user
+ */
 class User {
 	constructor() {
-		this.name = '';
-		this.surname = '';
-		this.mail = '';
-		this.pseudo = '';
+		/**
+		 * Username of that user
+		 * @type {string}
+		 */
+		this.username = '';
+		this.email = '';
 		this.password = '';
 	}
 }

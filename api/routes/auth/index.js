@@ -11,6 +11,8 @@ router.use(
 	(req, res) => {
 		const token = AuthService.issueJwt(req.user.username);
 
+		req.session.user = req.user;
+
 		return res.status(StatusCodes.OK).json({
 			username: req.user.username,
 			token,

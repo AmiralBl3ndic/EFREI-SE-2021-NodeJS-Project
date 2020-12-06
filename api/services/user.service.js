@@ -69,7 +69,7 @@ class UserService {
 	 * @param {string} user.username Username of the user to create
 	 * @param {string} user.email Email of the user to create
 	 * @param {string} user.password Password of the user to create, will be hashed
-	 * @returns {object | null} User object if created, null otherwise
+	 * @returns {User | null} User object if created, null otherwise
 	 * @throws {Error} in case of a supabase error
 	 */
 	static async create({ username, email, password }) {

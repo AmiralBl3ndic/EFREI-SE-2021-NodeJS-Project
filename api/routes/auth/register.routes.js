@@ -91,6 +91,9 @@ router.post('/', validateRequest, async (req, res) => {
 				message: 'Unable to create user',
 			});
 
+		delete user.password;
+		req.session.user = user;
+
 		return res.status(StatusCodes.CREATED).json({
 			username: req.body.username,
 			token: AuthService.issueJwt(req.body.username),
