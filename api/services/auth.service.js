@@ -18,7 +18,15 @@ class AuthService {
 	}
 
 	static issueJwt(username) {
-		return jwt.sign({ sub: username }, jwtSecret);
+		return jwt.sign(
+			{
+				sub: username,
+			},
+			jwtSecret,
+			{
+				expiresIn: '30m',
+			},
+		);
 	}
 }
 
