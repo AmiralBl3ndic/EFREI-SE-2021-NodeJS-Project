@@ -1,18 +1,36 @@
-import { Alert } from '@windmill/react-ui';
+import LoginForm from 'components/LoginForm';
 import RegisterForm from 'components/RegisterForm';
+import TabLogin from 'components/TabLogin';
 import Welcome from 'components/Welcome';
+import WelcomeMessage from 'components/WelcomeMessage';
 import { NextPage } from 'next';
 import React from 'react';
-import LoginForm from '../components/LoginForm';
+import { Tabs, Tab, Container, Col, Row } from 'react-bootstrap';
 
 const Index: NextPage = () => {
 	return (
 		<>
-			<div className="position-fixed w-100 h-100 left-0 right-0">
-				<Welcome />
-				<RegisterForm />
-				<LoginForm />
-			</div>
+			<Row>
+				<Col>
+					<WelcomeMessage />
+				</Col>
+				<Col>
+					<Container>
+						<Tabs
+							defaultActiveKey="profile"
+							id="uncontrolled-tab-example"
+							className="justify-content-center"
+						>
+							<Tab eventKey="home" title="Sign in">
+								<RegisterForm />
+							</Tab>
+							<Tab eventKey="profile" title="Sign up">
+								<LoginForm />
+							</Tab>
+						</Tabs>
+					</Container>
+				</Col>
+			</Row>
 		</>
 	);
 };

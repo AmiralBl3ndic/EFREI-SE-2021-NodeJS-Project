@@ -1,6 +1,7 @@
 import type { AppProps /*, AppContext */ } from 'next/app';
 import '../style/welcome.css';
 import 'tailwindcss/tailwind.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import { Windmill } from '@windmill/react-ui';
 
