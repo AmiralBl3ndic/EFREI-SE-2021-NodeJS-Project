@@ -1,7 +1,6 @@
 import LoginForm from 'components/LoginForm';
+import NavBar from 'components/NavBar';
 import RegisterForm from 'components/RegisterForm';
-import TabLogin from 'components/TabLogin';
-import Welcome from 'components/Welcome';
 import WelcomeMessage from 'components/WelcomeMessage';
 import { NextPage } from 'next';
 import React from 'react';
@@ -10,12 +9,13 @@ import { Tabs, Tab, Container, Col, Row } from 'react-bootstrap';
 const Index: NextPage = () => {
 	return (
 		<>
+			<NavBar />
 			<Row>
 				<Col>
 					<WelcomeMessage />
 				</Col>
 				<Col>
-					<Container>
+					<Container className="w-75">
 						<Tabs
 							defaultActiveKey="profile"
 							id="uncontrolled-tab-example"
