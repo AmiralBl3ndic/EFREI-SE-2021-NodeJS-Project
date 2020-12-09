@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import axios from 'axios';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -10,12 +10,13 @@ const LoginForm = () => {
 	const onSubmit = (data) => {
 		setUser(data.username);
 		setPassword(data.password);
-		console.log(data);
 
-		Axios.post('/auth/register', {
+		axios.post('api/auth/login', {
 			username: user,
 			password: password,
 		});
+
+		console.log(data);
 	};
 
 	return (
