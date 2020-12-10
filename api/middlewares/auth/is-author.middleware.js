@@ -11,7 +11,7 @@ const isAuthor = async (req, res, next) => {
 		.from('notes')
 		.select('author')
 		.eq('note_id', req.params.noteId)
-		.eq('author', req.user.id);
+		.eq('author', req.user.user_id);
 
 	if (error) throw new Error('Unable to determine access rights');
 

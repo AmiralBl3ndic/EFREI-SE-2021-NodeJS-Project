@@ -2,6 +2,7 @@ const { StatusCodes } = require('http-status-codes');
 const canReadNote = require('../../middlewares/auth/can-read-note.middleware');
 const canWriteNote = require('../../middlewares/auth/can-write-note.middleware');
 const canCreateNote = require('../../middlewares/auth/can-create-note.middleware');
+const isAuthor = require('../../middlewares/auth/is-author.middleware');
 const supabase = require('../../db');
 
 const router = require('express').Router();
@@ -30,29 +31,39 @@ router.post('/users/:username/notes', canCreateNote, async (req, res) => {
 	if (error) throw new Error(error.message);
 
 	return res.status(StatusCodes.CREATED).json({
-		id: req.body.noteId,
-		link: req.body.link,
+		id: data[0].note_id,
+		link: '/api/users/'
+			.concat(data[0].author)
+			.concat('/notes/')
+			.concat(data[0].note_id),
 		title: req.body.title,
 	});
 });
 
 // Update the title of a note
-router.patch(
-	'/users/:username/notes/:noteId',
-	canWriteNote,
-	async (req, res) => {
-		const { data, error } = await supabase
-			.from('notes')
-			.update({
-				data: { title: req.body.title },
-			})
-			.eq('note_id', req.params.noteId)
-			.eq('author', req.params.username);
+router.patch('/users/:username/notes/:noteId', isAuthor, async (req, res) => {
+	const { data, error } = await supabase
+		.from('notes')
+		.update({ title: req.body.title })
+		.match({ note_id: req.params.noteId });
+	//.match({ author: req.user.id })
 
-		if (error) throw new Error(error.message);
+	if (error) throw new Error(error.message);
 
-		return res.status(StatusCodes.OK).json(data[0]);
-	},
-);
+	return res.status(StatusCodes.OK).json(data[0]);
+});
+
+// Delete a note as an owner
+router.delete('/users/:username/notes/:noteId', isAuthor, async (req, res) => {
+	const { data, error } = await supabase
+		.from('notes')
+		.delete()
+		.match({ note_id: req.params.noteId });
+	//.match({ author: req.user.id })
+
+	if (error) throw new Error(error.message);
+
+	return res.status(StatusCodes.OK).json(data[0]);
+});
 
 module.exports = router;
