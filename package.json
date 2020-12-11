@@ -9,7 +9,8 @@
 		"start": "next start",
 		"lint:js": "eslint --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore .",
 		"lint": "yarn lint:js",
-		"test:api": "mocha \"api/**/*.spec.js\""
+		"test": "mocha \"api/test/unit/**/*.spec.js\"",
+		"test:e2e": "mocha \"api/test/e2e/**/*.spec.js\""
 	},
 	"dependencies": {
 		"@sentry/node": "^5.28.0",
