@@ -4,8 +4,11 @@ import RegisterForm from 'components/RegisterForm';
 import WelcomeMessage from 'components/WelcomeMessage';
 import { NextPage } from 'next';
 import React from 'react';
-import { Tabs, Tab, Container, Col, Row } from 'react-bootstrap';
-
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Container from 'react-bootstrap/Container';
 const Index: NextPage = () => {
 	return (
 		<>

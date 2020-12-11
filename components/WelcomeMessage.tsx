@@ -1,5 +1,5 @@
 import React from 'react';
-import Container from 'react-bootstrap/esm/Container';
+import Container from 'react-bootstrap/Container';
 
 const WelcomeMessage = () => {
 	return (
