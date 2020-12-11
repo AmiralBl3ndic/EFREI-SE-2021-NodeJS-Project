@@ -15,7 +15,7 @@ const canReadNote = async (req, res, next) => {
 	const { data, error } = await supabase
 		.from('user_notes_with_rights')
 		.select('can_read')
-		.eq('username', req.user.username)
+		.eq('username', req.user.user_id)
 		.eq('note_id', req.params.noteId)
 		.limit(1);
 

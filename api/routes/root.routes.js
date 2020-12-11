@@ -7,11 +7,7 @@ const authRoutes = require('./auth');
 const notesRoutes = require('./notes/get-note.routes');
 
 router.use('/auth', authRoutes);
-router.use(
-	'/notes',
-	passport.authenticate('jwt', { session: false }),
-	notesRoutes,
-);
+router.use(passport.authenticate('jwt', { session: false }), notesRoutes);
 
 router.use((req, res, next) => {
 	return res.status(StatusCodes.NOT_FOUND).json({

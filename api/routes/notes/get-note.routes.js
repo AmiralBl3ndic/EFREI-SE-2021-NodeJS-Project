@@ -7,7 +7,7 @@ const supabase = require('../../db');
 
 const router = require('express').Router();
 
-router.get('/:noteId', canReadNote, async (req, res) => {
+router.get('/users/:username/notes/:noteId', isAuthor, async (req, res) => {
 	const { data, error } = await supabase
 		.from('notes')
 		.select('note_id,title,current_content')
@@ -16,7 +16,12 @@ router.get('/:noteId', canReadNote, async (req, res) => {
 
 	if (error) throw new Error(error.message);
 
-	return res.status(StatusCodes.OK).json(data[0]);
+	return res.status(StatusCodes.OK).json({
+		username: req.params.username,
+		title: data[0].title,
+		content: data[0].current_content,
+		id: data[0].note_id,
+	});
 });
 
 // Create a note as a user
@@ -33,7 +38,7 @@ router.post('/users/:username/notes', canCreateNote, async (req, res) => {
 	return res.status(StatusCodes.CREATED).json({
 		id: data[0].note_id,
 		link: '/api/users/'
-			.concat(data[0].author)
+			.concat(req.params.username)
 			.concat('/notes/')
 			.concat(data[0].note_id),
 		title: req.body.title,
