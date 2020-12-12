@@ -1,4 +1,4 @@
-const UUIDService = require('api/services/uuid.service');
+const UUIDService = require('../services/uuid.service');
 
 class Revision {
 	/**
