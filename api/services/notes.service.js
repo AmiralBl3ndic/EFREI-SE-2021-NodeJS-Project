@@ -14,8 +14,6 @@ class NotesService {
 	 * @return {string} Content of the note after computation
 	 */
 	static buildNoteContentFromRevisions(...revisions) {
-		const allModifications = revisions.flatMap(R.prop('modification'));
-
 		// Check if any modification on any revision has a negative or 0 position
 		if (
 			revisions
@@ -40,8 +38,30 @@ class NotesService {
 		});
 
 		// Sort timestamp with most recent timestamps first
-		const revsByTimestamp = R.sortBy(R.prop('timestamp'), revisions).reverse();
-		R.keys(revsByTimestamp).map((k) => revsByTimestamp[k]);
+		const orderedRevisions = R.sortBy(R.prop('timestamp'), revisions).reverse();
+
+		const modificationOrderedByTimestamp = orderedRevisions.flatMap(
+			R.prop('modification'),
+		);
+
+		const maxLineNumber = R.reduce(
+			R.max,
+			-Infinity,
+			modificationOrderedByTimestamp.map(R.prop('position')),
+		);
+
+		let content = '';
+		for (let i = 1; i <= maxLineNumber; i++) {
+			// Find the most recent modification on that line
+			const modif = modificationOrderedByTimestamp.find(
+				(m) => m.position === i,
+			);
+
+			// Apply modification if found, else apply empty line
+			content += modif ? `${modif.after}\n` : '\n';
+		}
+
+		return content;
 	}
 
 	/**
