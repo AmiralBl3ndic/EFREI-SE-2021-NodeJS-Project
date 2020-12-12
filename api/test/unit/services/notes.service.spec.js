@@ -13,7 +13,7 @@ describe('NotesService', () => {
 
 			expect(() => NotesService.buildNoteContentFromRevisions(revision))
 				.to.throw(Error)
-				.with.property('message', 'Invalid position -1');
+				.with.property('message', 'Invalid modification position');
 		});
 
 		describe('- On one line only', () => {
@@ -23,7 +23,7 @@ describe('NotesService', () => {
 				]);
 
 				expect(NotesService.buildNoteContentFromRevisions(revision)).to.eq(
-					'Hello world',
+					'Hello world\n',
 				);
 			});
 
@@ -52,7 +52,7 @@ describe('NotesService', () => {
 				];
 
 				expect(NotesService.buildNoteContentFromRevisions(...revisions)).to.eq(
-					'How are you?',
+					'How are you?\n',
 				);
 			});
 
@@ -67,7 +67,7 @@ describe('NotesService', () => {
 				];
 
 				expect(NotesService.buildNoteContentFromRevisions(...revisions)).to.eq(
-					'How are you?',
+					'How are you?\n',
 				);
 			});
 		});
@@ -80,7 +80,7 @@ describe('NotesService', () => {
 				]);
 
 				expect(NotesService.buildNoteContentFromRevisions(revision)).to.eq(
-					'Hello world\nHow are you?',
+					'Hello world\nHow are you?\n',
 				);
 			});
 
@@ -93,7 +93,7 @@ describe('NotesService', () => {
 				];
 
 				expect(NotesService.buildNoteContentFromRevisions(...revisions)).to.eq(
-					'Hello world\nHow are you?',
+					'Hello, world\nHow are you?\n',
 				);
 			});
 
@@ -106,7 +106,7 @@ describe('NotesService', () => {
 				];
 
 				expect(NotesService.buildNoteContentFromRevisions(...revisions)).to.eq(
-					'Hello world\n\nHow are you?',
+					'Hello, world\n\nHow are you?\n',
 				);
 			});
 		});
