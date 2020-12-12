@@ -3,11 +3,13 @@ const canReadNote = require('../../middlewares/auth/can-read-note.middleware');
 const canWriteNote = require('../../middlewares/auth/can-write-note.middleware');
 const canCreateNote = require('../../middlewares/auth/can-create-note.middleware');
 const isAuthor = require('../../middlewares/auth/is-author.middleware');
+const NotesService = require('../../services/notes.service');
 const supabase = require('../../db');
 
 const router = require('express').Router();
 
-router.get('/users/:username/notes/:noteId', isAuthor, async (req, res) => {
+// Get note informations
+router.get('/users/:username/notes/:noteId', canReadNote, async (req, res) => {
 	const { data, error } = await supabase
 		.from('notes')
 		.select('note_id,title,current_content')
@@ -24,7 +26,7 @@ router.get('/users/:username/notes/:noteId', isAuthor, async (req, res) => {
 	});
 });
 
-// Create a note as a user
+// Create a note for a user
 router.post('/users/:username/notes', canCreateNote, async (req, res) => {
 	const { data, error } = await supabase.from('notes').insert([
 		{
@@ -32,7 +34,14 @@ router.post('/users/:username/notes', canCreateNote, async (req, res) => {
 			title: req.body.title,
 		},
 	]);
-
+	const { data2, error2 } = await supabase.from('notes_access_control').insert([
+		{
+			user_id: req.user.user_id,
+			note: data[0].note_id,
+			can_read: true,
+			can_write: true,
+		},
+	]);
 	if (error) throw new Error(error.message);
 
 	return res.status(StatusCodes.CREATED).json({
@@ -45,7 +54,7 @@ router.post('/users/:username/notes', canCreateNote, async (req, res) => {
 	});
 });
 
-// Update the title of a note
+// Update the title of the note
 router.patch('/users/:username/notes/:noteId', isAuthor, async (req, res) => {
 	const { data, error } = await supabase
 		.from('notes')
@@ -58,7 +67,7 @@ router.patch('/users/:username/notes/:noteId', isAuthor, async (req, res) => {
 	return res.status(StatusCodes.OK).json(data[0]);
 });
 
-// Delete a note as an owner
+// Delete a note
 router.delete('/users/:username/notes/:noteId', isAuthor, async (req, res) => {
 	const { data, error } = await supabase
 		.from('notes')
@@ -70,5 +79,41 @@ router.delete('/users/:username/notes/:noteId', isAuthor, async (req, res) => {
 
 	return res.status(StatusCodes.OK).json(data[0]);
 });
+
+// Revision created and stored
+router.post(
+	'/users/:username/notes/:noteId/revisions',
+	isAuthor,
+	async (req, res) => {
+		const revision = await supabasefrom('revisions').insert([
+			{
+				createdat: Date.now(),
+				note: req.params.noteId,
+			},
+		]);
+
+		const new_content = await NotesService.buildNoteContentFromRevisions(
+			revision,
+		);
+
+		const { data2, error2 } = await supabasefrom('modifications').insert([
+			{
+				createdat: Date.now(),
+				note: req.params.noteId,
+			},
+		]);
+
+		if (error) throw new Error(error.message);
+
+		return res.status(StatusCodes.CREATED).json({
+			id: data[0].note_id,
+			link: '/api/users/'
+				.concat(req.params.username)
+				.concat('/notes/')
+				.concat(data[0].note_id),
+			title: req.body.title,
+		});
+	},
+);
 
 module.exports = router;
