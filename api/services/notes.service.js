@@ -4,10 +4,10 @@
 class NotesService {
 	/**
 	 * Compute a note content from revisions
-	 * @param {Revision} revisions
+	 * @param {Revision} revisions Revisions to use to compute content
 	 * @return {string} Content of the note after computation
 	 */
-	static buildNoteContentFromRevisions(revisions) {
+	static buildNoteContentFromRevisions(...revisions) {
 		return '';
 	}
 
