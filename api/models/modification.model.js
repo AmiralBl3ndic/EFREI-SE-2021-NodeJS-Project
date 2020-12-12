@@ -25,3 +25,5 @@ class Modification {
 		this.after = after;
 	}
 }
+
+module.exports = Modification;

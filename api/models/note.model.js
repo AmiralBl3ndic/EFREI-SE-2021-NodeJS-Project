@@ -1,4 +1,4 @@
-const UUIDService = require('api/services/uuid.service');
+const UUIDService = require('../services/uuid.service');
 
 class Note {
 	constructor(title, content, revisions = []) {
@@ -21,3 +21,5 @@ class Note {
 		this.revisions = revisions;
 	}
 }
+
+module.exports = Note;
