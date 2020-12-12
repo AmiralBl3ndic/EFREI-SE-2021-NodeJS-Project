@@ -13,7 +13,7 @@ describe('NotesService', () => {
 
 			expect(() => NotesService.buildNoteContentFromRevisions(revision))
 				.to.throw(Error)
-				.with.property('message', 'Invalid position -1');
+				.with.property('message', 'Invalid modification position');
 		});
 
 		describe('- On one line only', () => {
