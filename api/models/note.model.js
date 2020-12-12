@@ -1,5 +1,5 @@
 class Note {
-	constructor() {
+	constructor(title, user) {
 		this.title = '';
 		this.description = '';
 		this.id = '';
