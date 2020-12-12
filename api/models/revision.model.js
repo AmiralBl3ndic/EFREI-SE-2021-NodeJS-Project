@@ -1,11 +1,9 @@
-const { customAlphabet } = require('nanoid');
-
-const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 16);
+const UUIDService = require('api/services/uuid.service');
 
 class Revision {
 	/**
 	 *
-	 * @param {string} timestamp
+	 * @param {number} timestamp
 	 * @param {Modification[]} modifications
 	 */
 	constructor(timestamp, modifications) {
@@ -13,7 +11,7 @@ class Revision {
 		 * Unique identifier of the revision
 		 * @type {string}
 		 */
-		this.hash = nanoid();
+		this.hash = UUIDService.generateNanoId();
 
 		/**
 		 * Time (in ms) at which the revisions occurs
@@ -28,3 +26,5 @@ class Revision {
 		this.modification = modifications;
 	}
 }
+
+module.exports = Revision;

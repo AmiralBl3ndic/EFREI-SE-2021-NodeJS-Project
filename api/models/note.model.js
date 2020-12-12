@@ -21,3 +21,5 @@ class Note {
 		this.revisions = revisions;
 	}
 }
+
+module.exports = Note;
