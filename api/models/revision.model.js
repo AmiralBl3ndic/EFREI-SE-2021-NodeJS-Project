@@ -17,7 +17,7 @@ class Revision {
 		 * Time (in ms) at which the revisions occurs
 		 * @type {number}
 		 */
-		this.timestamp = Date.now();
+		this.timestamp = timestamp;
 
 		/**
 		 *
