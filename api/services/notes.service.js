@@ -125,7 +125,36 @@ class NotesService {
 		newContent,
 		timestamp = Date.now(),
 	) {
-		return new Revision(timestamp, []);
+		const oldLines = oldContent == null ? [undefined] : oldContent.split('\n');
+		const newLines = newContent == null ? [undefined] : newContent.split('\n');
+
+		const modifications = [];
+
+		if (oldLines.length <= newLines.length) {
+			for (let i = 0; i < oldLines.length; i++) {
+				if (oldLines[i] !== newLines[i]) {
+					modifications.push(new Modification(i + 1, oldLines[i], newLines[i]));
+				}
+			}
+
+			for (let i = oldLines.length; i < newLines.length; i++) {
+				modifications.push(new Modification(i + 1, undefined, newLines[i]));
+			}
+		}
+
+		if (newLines.length < oldLines.length) {
+			for (let i = 0; i < newLines.length; i++) {
+				if (oldLines[i] !== newLines[i]) {
+					modifications.push(new Modification(i + 1, oldLines[i], newLines[i]));
+				}
+			}
+
+			for (let i = newLines.length; i < oldLines.length; i++) {
+				modifications.push(new Modification(i + 1, oldLines[i], undefined));
+			}
+		}
+
+		return new Revision(timestamp, modifications);
 	}
 }
 
