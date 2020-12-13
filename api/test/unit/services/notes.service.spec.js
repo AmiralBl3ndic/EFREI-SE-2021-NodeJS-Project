@@ -163,4 +163,137 @@ describe('NotesService', () => {
 			);
 		});
 	});
+
+	describe('.getRevisionFromContentDifference', () => {
+		it('# works when adding content to an empty note', () => {
+			const contentBefore = undefined;
+			const contentAfter = 'Hello world';
+
+			const revision = NotesService.getRevisionFromContentDifference(
+				contentBefore,
+				contentAfter,
+			);
+
+			expect(revision.modification.length).to.eq(1);
+			expect(revision.modification[0].position).to.eq(1);
+			expect(revision.modification[0].before).to.eq(undefined);
+			expect(revision.modification[0].after).to.eq(contentAfter);
+		});
+
+		it('# works for a single line difference', () => {
+			const contentBefore = 'Hello';
+			const contentAfter = 'Hello world';
+
+			const revision = NotesService.getRevisionFromContentDifference(
+				contentBefore,
+				contentAfter,
+			);
+
+			expect(revision.modification.length).to.eq(1);
+			expect(revision.modification[0].position).to.eq(1);
+			expect(revision.modification[0].before).to.eq(contentBefore);
+			expect(revision.modification[0].after).to.eq(contentAfter);
+		});
+
+		it('# works when adding lines', () => {
+			const contentBefore = 'Hello';
+			const contentAfter = 'Hello\nHow are you?';
+
+			const revision = NotesService.getRevisionFromContentDifference(
+				contentBefore,
+				contentAfter,
+			);
+
+			expect(revision.modification.length).to.eq(1);
+
+			expect(revision.modification[0].position).to.eq(2);
+
+			expect(revision.modification[0].before).to.eq(undefined);
+			expect(revision.modification[0].after).to.eq(contentAfter.split('\n')[1]);
+		});
+
+		it('# works when modifying a line and adding another line', () => {
+			const contentBefore = 'Hello';
+			const contentAfter = 'Hello world\nHow are you?';
+
+			const revision = NotesService.getRevisionFromContentDifference(
+				contentBefore,
+				contentAfter,
+			);
+
+			expect(revision.modification.length).to.eq(2);
+			expect(revision.modification[0].position).to.eq(1);
+			expect(revision.modification[1].position).to.eq(2);
+
+			expect(revision.modification[0].before).to.eq(contentBefore);
+			expect(revision.modification[0].after).to.eq(contentAfter.split('\n')[0]);
+
+			expect(revision.modification[1].before).to.eq(undefined);
+			expect(revision.modification[1].after).to.eq(contentAfter.split('\n')[1]);
+		});
+
+		it('# works when adding a line between two other', () => {
+			const contentBefore = 'Line 1\nLine 3';
+			const contentAfter = 'Line 1\nLine 2\nLine 3';
+
+			const revision = NotesService.getRevisionFromContentDifference(
+				contentBefore,
+				contentAfter,
+			);
+
+			expect(revision.modification.length).to.eq(2);
+			expect(revision.modification[0].position).to.eq(2);
+			expect(revision.modification[1].position).to.eq(3);
+
+			expect(revision.modification[0].before).to.eq('Line 3');
+			expect(revision.modification[0].after).to.eq('Line 2');
+
+			expect(revision.modification[1].before).to.eq(undefined);
+			expect(revision.modification[1].after).to.eq('Line 3');
+		});
+
+		it('# works when removing a line', () => {
+			const contentBefore = 'Hello world\nHow are you?';
+			const contentAfter = 'Hello';
+
+			const revision = NotesService.getRevisionFromContentDifference(
+				contentBefore,
+				contentAfter,
+			);
+
+			expect(revision.modification.length).to.eq(2);
+			expect(revision.modification[0].position).to.eq(1);
+			expect(revision.modification[1].position).to.eq(2);
+
+			expect(revision.modification[0].before).to.eq(
+				contentBefore.split('\n')[0],
+			);
+			expect(revision.modification[0].after).to.eq(contentAfter);
+
+			expect(revision.modification[1].before).to.eq(
+				contentBefore.split('\n')[1],
+			);
+			expect(revision.modification[1].after).to.eq(undefined);
+		});
+
+		it('# works when removing a line between two other', () => {
+			const contentBefore = 'Line 1\nLine 2\nLine 3';
+			const contentAfter = 'Line 1\nLine 3';
+
+			const revision = NotesService.getRevisionFromContentDifference(
+				contentBefore,
+				contentAfter,
+			);
+
+			expect(revision.modification.length).to.eq(2);
+			expect(revision.modification[0].position).to.eq(2);
+			expect(revision.modification[1].position).to.eq(3);
+
+			expect(revision.modification[0].before).to.eq('Line 2');
+			expect(revision.modification[0].after).to.eq('Line 3');
+
+			expect(revision.modification[1].before).to.eq('Line 3');
+			expect(revision.modification[1].after).to.eq(undefined);
+		});
+	});
 });
