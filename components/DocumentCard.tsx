@@ -1,6 +1,11 @@
 import React from 'react';
 
-const DocumentCard = () => {
+interface DocumentCardProps {
+	id: number;
+	title: string;
+}
+
+const DocumentCard: React.SFC<DocumentCardProps> = ({ id, title }) => {
 	return (
 		<div className="col-xl-3 col-sm-6 col-12">
 			<div className="card">
@@ -11,8 +16,8 @@ const DocumentCard = () => {
 								<i className="icon-pencil primary font-large-2 float-left"></i>
 							</div>
 							<div className="media-body text-right">
-								<h3>Note #1</h3>
-								<span>Some notes from FM class</span>
+								<h3>Note #{id}</h3>
+								<span>{title}</span>
 							</div>
 						</div>
 					</div>
