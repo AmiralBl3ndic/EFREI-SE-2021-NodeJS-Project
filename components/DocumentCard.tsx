@@ -7,18 +7,16 @@ interface DocumentCardProps {
 
 const DocumentCard: React.SFC<DocumentCardProps> = ({ id, title }) => {
 	return (
-		<div className="col-xl-3 col-sm-6 col-12">
-			<div className="card my-card">
-				<div className="card-content">
-					<div className="card-body">
-						<div className="media d-flex">
-							<div className="align-self-center">
-								<i className="gg-file-document"></i>
-							</div>
-							<div className="media-body text-right">
-								<h3>Note #{id}</h3>
-								<span>{title}</span>
-							</div>
+		<div className="bg-light w-75 rounded-2xl my-2">
+			<div className="card-content">
+				<div className="card-body">
+					<div className="media d-flex">
+						<div className="align-self-center">
+							<i className="gg-file-document"></i>
+						</div>
+						<div className="media-body text-right">
+							<h3>Note #{id}</h3>
+							<span>{title}</span>
 						</div>
 					</div>
 				</div>
