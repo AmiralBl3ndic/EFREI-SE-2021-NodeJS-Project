@@ -2,10 +2,13 @@ import { Action, Thunk } from 'easy-peasy';
 import { Note, Revision, User } from './frontend.types';
 
 export default interface ApplicationStore {
+	// ======== State ========
+	currentUser?: User;
+	notes: Note[];
+	revisions: Revision[];
+
 
 	// ======== Auth =========
-	currentUser?: User;
-
 	setUser: Action<ApplicationStore, User>;
 
 	loginWithUsernameAndPassword: Thunk<ApplicationStore, {username:string, password:string}>;
@@ -14,8 +17,6 @@ export default interface ApplicationStore {
 
 
 	// ======== Notes ==========
-	notes: Note[];
-
 	addNote: Action<ApplicationStore, Note>;
 
 	addMultipleNotes: Action<ApplicationStore, Note[]>;
@@ -26,8 +27,6 @@ export default interface ApplicationStore {
 
 
 	// ======== Note/Revision =======
-	revisions: Revision[];
-
 	addRevision: Action<ApplicationStore, Revision>;
 
 	addMultipleRevision: Action<ApplicationStore, Revision[]>;

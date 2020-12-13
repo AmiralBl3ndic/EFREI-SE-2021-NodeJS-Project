@@ -9,10 +9,12 @@ const $axios = axios.create({
 })
 
 const store = createStore<ApplicationStore>({
+	// ======== State ========
+	currentUser: null,
+	notes: [],
+	revisions: [],
 
 	// ======== Auth =========
-	currentUser: null,
-
 	setUser: action((state, userInfo) => {
 		state.currentUser = userInfo;
 	}),
@@ -38,8 +40,6 @@ const store = createStore<ApplicationStore>({
 	}),
 
 	// ======== Notes ==========
-	notes: [],
-
 	addNote: action((state, noteData) => {
 			state.notes.push(noteData);
 	}),
@@ -67,8 +67,6 @@ const store = createStore<ApplicationStore>({
 
 
 	// ======== Note/Revision =======
-	revisions: [],
-
 	addRevision: action((state, revision) => {
 		state.revisions.push(revision);
 	}),
@@ -79,7 +77,8 @@ const store = createStore<ApplicationStore>({
 
 	getRevisionForNote: thunk((actions, noteId, { getState }) => {
 		if (getState().currentUser === null) throw new Error('User not logged in');
-		const note = getState().notes.filter(note => note.id === noteId)[0]
+		const note = getState().notes.find(note => note.id === noteId)
+		// TODO: catch error if note is undefined
 		$axios.get<Revision[]>(`/users/${getState().currentUser.username}/notes/${note.id}/revisions`)
 			.then(res => {
 				actions.addMultipleRevision(res.data);
