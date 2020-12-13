@@ -57,8 +57,12 @@ class NotesService {
 				(m) => m.position === i,
 			);
 
+			if (!modif) {
+				throw new Error('Missing line data');
+			}
+
 			// Apply modification if found, else apply empty line
-			content += modif ? `${modif.after}\n` : '\n';
+			content += modif.after ? `${modif.after}\n` : '';
 		}
 
 		return content;
@@ -73,7 +77,9 @@ class NotesService {
 	static convertNoteContentToRevision(content, timestamp = Date.now()) {
 		return new Revision(
 			timestamp,
-			content.split('\n').map((l, idx) => new Modification(idx + 1, '', l)),
+			content
+				.split('\n')
+				.map((l, idx) => new Modification(idx + 1, undefined, l)),
 		);
 	}
 
@@ -97,7 +103,14 @@ class NotesService {
 	 * @returns {string} Content of the note after reverting the revision
 	 */
 	static revertRevision(content, revision) {
-		return '';
+		const revertedRevision = new Revision(
+			revision.timestamp,
+			revision.modification.map(
+				(m) => new Modification(m.position, m.after, m.before),
+			),
+		);
+
+		return NotesService.applyRevisionsToContent(content, revertedRevision);
 	}
 }
 
