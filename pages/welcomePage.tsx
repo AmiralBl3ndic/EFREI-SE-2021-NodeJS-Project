@@ -12,14 +12,13 @@ import Container from 'react-bootstrap/Container';
 
 const WelcomePage: NextPage = () => {
 	return (
-		<>
-			<NavBar />
-			<Row>
-				<Col>
-					<WelcomeMessage />
-				</Col>
-				<Col>
-					<Container className="w-75">
+		<div className="h-screen overflow-y-scroll overflow-x-hidden">
+			<div className="d-flex justify-content-around h-100">
+				<div className="row h-100">
+					<div className="col-12 col-md-6 d-flex flex-column justify-content-center">
+						<WelcomeMessage />
+					</div>
+					<div className="col-12 col-md-6 d-flex flex-column justify-content-center mt-10">
 						<Tabs
 							defaultActiveKey="profile"
 							id="uncontrolled-tab-example"
@@ -32,10 +31,10 @@ const WelcomePage: NextPage = () => {
 								<LoginForm />
 							</Tab>
 						</Tabs>
-					</Container>
-				</Col>
-			</Row>
-		</>
+					</div>
+				</div>
+			</div>
+		</div>
 	);
 };
 
