@@ -112,6 +112,21 @@ class NotesService {
 
 		return NotesService.applyRevisionsToContent(content, revertedRevision);
 	}
+
+	/**
+	 * Generate the revision to transition between the old and the new content of the note
+	 * @param {string} oldContent Base content to compare to
+	 * @param {string} newContent Final content to reach
+	 * @param {number} timestamp Timestamp to use for revision, default is Date.now()
+	 * @returns {Revision} Revision to reach the desired final content
+	 */
+	static getRevisionFromContentDifference(
+		oldContent,
+		newContent,
+		timestamp = Date.now(),
+	) {
+		return new Revision(timestamp, []);
+	}
 }
 
 module.exports = NotesService;
