@@ -1,20 +1,25 @@
 import LoginForm from 'components/LoginForm';
+import NavBar from 'components/NavBar';
 import RegisterForm from 'components/RegisterForm';
 import WelcomeMessage from 'components/WelcomeMessage';
 import { NextPage } from 'next';
 import React from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Container from 'react-bootstrap/Container';
 
-const Index: NextPage = () => {
+const WelcomePage: NextPage = () => {
 	return (
-		<div className="h-screen overflow-y-scroll overflow-x-hidden">
-			<div className="d-flex justify-content-around h-100">
-				<div className="row h-100">
-					<div className="col-12 col-md-6 d-flex flex-column justify-content-center">
-						<WelcomeMessage />
-					</div>
-					<div className="col-12 col-md-6 d-flex flex-column justify-content-center mt-10">
+		<>
+			<NavBar />
+			<Row>
+				<Col>
+					<WelcomeMessage />
+				</Col>
+				<Col>
+					<Container className="w-75">
 						<Tabs
 							defaultActiveKey="profile"
 							id="uncontrolled-tab-example"
@@ -27,11 +32,11 @@ const Index: NextPage = () => {
 								<LoginForm />
 							</Tab>
 						</Tabs>
-					</div>
-				</div>
-			</div>
-		</div>
+					</Container>
+				</Col>
+			</Row>
+		</>
 	);
 };
 
-export default Index;
+export default WelcomePage;

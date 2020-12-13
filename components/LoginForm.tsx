@@ -7,20 +7,27 @@ const LoginForm = () => {
 	const [user, setUser] = React.useState('');
 	const [password, setPassword] = React.useState('');
 
-	const onSubmit = (data) => {
+	const onSubmit = async (data) => {
 		setUser(data.username);
 		setPassword(data.password);
 
-		axios.post('api/auth/login', {
-			username: user,
-			password: password,
-		});
+		await axios
+			.post('api/auth/login', {
+				username: user,
+				password: password,
+			})
+			.then((response) => {
+				console.log(response);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 
 		console.log(data);
 	};
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+		<div className="flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
 			<div className="max-w-md w-full space-y-8">
 				<div>
 					<img
