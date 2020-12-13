@@ -1,0 +1,36 @@
+import { Action, Thunk } from 'easy-peasy';
+import { Note, Revision, User } from './frontend.types';
+
+export default interface ApplicationStore {
+
+	// ======== Auth =========
+	currentUser?: User;
+
+	setUser: Action<ApplicationStore, User>;
+
+	loginWithUsernameAndPassword: Thunk<ApplicationStore, {username:string, password:string}>;
+
+	registerWithUEmailUsernameAndPassword: Thunk<ApplicationStore, {email:string, username:string, password:string}>;
+
+
+	// ======== Notes ==========
+	notes: Note[];
+
+	addNote: Action<ApplicationStore, Note>;
+
+	addMultipleNotes: Action<ApplicationStore, Note[]>;
+
+	resetNotes: Action<ApplicationStore>;
+
+	getAllNoteOfUser: Thunk<ApplicationStore>;
+
+
+	// ======== Note/Revision =======
+	revisions: Revision[];
+
+	addRevision: Action<ApplicationStore, Revision>;
+
+	addMultipleRevision: Action<ApplicationStore, Revision[]>;
+
+	getRevisionForNote: Thunk<ApplicationStore, string>;
+}
