@@ -1,29 +1,41 @@
-import Axios from 'axios';
+import axios from 'axios';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
 const RegisterForm = () => {
 	const { register, handleSubmit } = useForm();
 	const [user, setUser] = React.useState('');
-	const [mail, setMail] = React.useState('');
+	const [email, setEmail] = React.useState('');
 	const [password, setPassword] = React.useState('');
 
 	const onSubmit = (data) => {
 		setUser(data.username);
 		setPassword(data.password);
-		setMail(data.mail);
-		console.log(data);
+		setEmail(data.email);
 
-		Axios.post('/auth/login', {
+		console.log(user + ' ' + password + ' ' + email);
+
+		axios
+			.post('api/auth/register', {
+				username: user,
+				password: password,
+				email: email,
+			})
+			.then((response) => {
+				console.log(response);
+			})
+			.catch((error) => console.log(error));
+
+		console.log({
 			username: user,
 			password: password,
-			mail: mail,
+			email: email,
 		});
 	};
 
 	return (
 		<>
-			<div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+			<div className="flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
 				<div className="max-w-md w-full space-y-8">
 					<div>
 						<img
@@ -53,9 +65,9 @@ const RegisterForm = () => {
 							<div>
 								<label className="sr-only">Email address</label>
 								<input
-									name="username"
+									name="email"
 									className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-									placeholder="Email address"
+									placeholder="Email"
 									ref={register({ required: true })}
 								/>
 							</div>
