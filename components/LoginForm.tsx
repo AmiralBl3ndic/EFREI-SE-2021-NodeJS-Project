@@ -12,7 +12,7 @@ const LoginForm = () => {
 		setPassword(data.password);
 
 		await axios
-			.post('api/auth/login', {
+			.post('http://localhost:8080/api/auth/login', {
 				username: user,
 				password: password,
 			})
