@@ -57,8 +57,12 @@ class NotesService {
 				(m) => m.position === i,
 			);
 
+			if (!modif) {
+				throw new Error('Missing line data');
+			}
+
 			// Apply modification if found, else apply empty line
-			content += modif ? `${modif.after}\n` : '\n';
+			content += modif.after ? `${modif.after}\n` : '';
 		}
 
 		return content;
@@ -73,7 +77,9 @@ class NotesService {
 	static convertNoteContentToRevision(content, timestamp = Date.now()) {
 		return new Revision(
 			timestamp,
-			content.split('\n').map((l, idx) => new Modification(idx + 1, '', l)),
+			content
+				.split('\n')
+				.map((l, idx) => new Modification(idx + 1, undefined, l)),
 		);
 	}
 
@@ -97,7 +103,58 @@ class NotesService {
 	 * @returns {string} Content of the note after reverting the revision
 	 */
 	static revertRevision(content, revision) {
-		return '';
+		const revertedRevision = new Revision(
+			revision.timestamp,
+			revision.modification.map(
+				(m) => new Modification(m.position, m.after, m.before),
+			),
+		);
+
+		return NotesService.applyRevisionsToContent(content, revertedRevision);
+	}
+
+	/**
+	 * Generate the revision to transition between the old and the new content of the note
+	 * @param {string} oldContent Base content to compare to
+	 * @param {string} newContent Final content to reach
+	 * @param {number} timestamp Timestamp to use for revision, default is Date.now()
+	 * @returns {Revision} Revision to reach the desired final content
+	 */
+	static getRevisionFromContentDifference(
+		oldContent,
+		newContent,
+		timestamp = Date.now(),
+	) {
+		const oldLines = oldContent == null ? [undefined] : oldContent.split('\n');
+		const newLines = newContent == null ? [undefined] : newContent.split('\n');
+
+		const modifications = [];
+
+		if (oldLines.length <= newLines.length) {
+			for (let i = 0; i < oldLines.length; i++) {
+				if (oldLines[i] !== newLines[i]) {
+					modifications.push(new Modification(i + 1, oldLines[i], newLines[i]));
+				}
+			}
+
+			for (let i = oldLines.length; i < newLines.length; i++) {
+				modifications.push(new Modification(i + 1, undefined, newLines[i]));
+			}
+		}
+
+		if (newLines.length < oldLines.length) {
+			for (let i = 0; i < newLines.length; i++) {
+				if (oldLines[i] !== newLines[i]) {
+					modifications.push(new Modification(i + 1, oldLines[i], newLines[i]));
+				}
+			}
+
+			for (let i = newLines.length; i < oldLines.length; i++) {
+				modifications.push(new Modification(i + 1, oldLines[i], undefined));
+			}
+		}
+
+		return new Revision(timestamp, modifications);
 	}
 }
 
