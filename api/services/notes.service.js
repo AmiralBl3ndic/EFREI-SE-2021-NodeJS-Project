@@ -204,7 +204,9 @@ class NotesService {
 					};
 				}),
 			)
-		).filter((p) => p != null);
+		)
+			.filter((p) => p.status === 'fulfilled')
+			.map(R.prop('value'));
 
 		// Ensure index has been created or emptied prior to doing anything else now
 		await resetIndexPromise;
