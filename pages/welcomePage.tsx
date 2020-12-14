@@ -16,8 +16,8 @@ const WelcomePage: NextPage = () => {
 	);
 
 	React.useEffect(() => {
-		if (router && currentUser) {
-			router.push('/Home');
+		if (router != null && currentUser) {
+			router.push('home');
 		}
 	}, [router, currentUser]);
 
