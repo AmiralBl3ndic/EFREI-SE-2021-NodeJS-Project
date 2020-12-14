@@ -5,8 +5,22 @@ import { NextPage } from 'next';
 import React from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
+import { useRouter } from 'next/router';
+import { useStoreState } from 'easy-peasy';
+import ApplicationStore from 'store/appstore.model';
 
 const Index: NextPage = () => {
+	const router = useRouter();
+	const currentUser = useStoreState<ApplicationStore>(
+		(state) => state.currentUser,
+	);
+
+	React.useEffect(() => {
+		if (router && currentUser) {
+			router.push('#');
+		}
+	}, [router, currentUser]);
+
 	return (
 		<div className="h-screen overflow-y-scroll overflow-x-hidden">
 			<div className="d-flex justify-content-around h-100">
