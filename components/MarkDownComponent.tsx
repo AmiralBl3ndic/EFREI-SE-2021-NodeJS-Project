@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MarkDownComponent = () => {
+const MarkDownComponent: React.FC = () => {
 	return <div></div>;
 };
 

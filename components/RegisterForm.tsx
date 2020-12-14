@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-const RegisterForm = () => {
+const RegisterForm: React.FC = () => {
 	const { register, handleSubmit } = useForm();
 	const [user, setUser] = React.useState('');
 	const [email, setEmail] = React.useState('');
