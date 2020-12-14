@@ -1,5 +1,5 @@
 module.exports = {
-	roots: ['<rootDir>/pages'],
+	testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
 
 	transform: {
 		'^.+\\.tsx?$': 'ts-jest',
