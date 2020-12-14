@@ -6,8 +6,14 @@ const passport = require('../auth/passport.config');
 const authRoutes = require('./auth');
 const notesRoutes = require('./notes/get-note.routes');
 const usersRoutes = require('./users/get-users.routes');
+const searchRoutes = require('./search.routes');
 
 router.use('/auth', authRoutes);
+router.use(
+	'/search',
+	passport.authenticate('jwt', { session: false }),
+	searchRoutes,
+);
 router.use(
 	'/notes',
 	passport.authenticate('jwt', { session: false }),

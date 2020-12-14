@@ -29,7 +29,7 @@ class UserService {
 	 * @throws In case of an error with supabase
 	 */
 	static findByUsername(username) {
-		return this._findOneByField('username', username.trim().toLowerCase());
+		return this._findOneByField('username', username.trim());
 	}
 
 	/**
