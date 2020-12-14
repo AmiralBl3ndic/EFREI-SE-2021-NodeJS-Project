@@ -4,6 +4,7 @@ module.exports = {
 		browser: true,
 		node: true,
 		es6: true,
+		jest: true,
 	},
 	parserOptions: {
 		parser: 'babel-eslint',
@@ -14,8 +15,10 @@ module.exports = {
 		'prettier',
 		'plugin:prettier/recommended',
 		'plugin:react/recommended',
+		'plugin:@typescript-eslint/eslint-recommended',
+		'plugin:@typescript-eslint/recommended',
 	],
-	plugins: ['prettier'],
+	plugins: ['prettier', '@typescript-eslint'],
 	// add your custom rules here
 	rules: {
 		'react/react-in-jsx-scope': 'off',
