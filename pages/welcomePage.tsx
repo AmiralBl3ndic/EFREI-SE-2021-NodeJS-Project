@@ -9,6 +9,7 @@ import Tab from 'react-bootstrap/Tab';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
+import { useStoreState } from 'easy-peasy';
 
 const WelcomePage: NextPage = () => {
 	return (

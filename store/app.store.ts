@@ -34,7 +34,7 @@ const store = createStore<ApplicationStore>({
 
 	registerWithUEmailUsernameAndPassword: thunk((actions, registerData) => {
 		$axios
-			.post<User>('/auth/login', registerData)
+			.post<User>('/auth/register', registerData)
 			.then((res) => {
 				actions.setUser(res.data);
 			})
