@@ -1,5 +1,5 @@
 {
-	"name": "nodejs-m2-project",
+	"name": "ad-versionem",
 	"version": "1.0.0",
 	"main": "api/index.js",
 	"private": true,
