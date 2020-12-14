@@ -9,8 +9,9 @@
 		"start": "next start",
 		"lint:js": "eslint --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore .",
 		"lint": "yarn lint:js",
-		"test": "mocha \"api/test/unit/**/*.spec.js\"",
-		"test:e2e": "mocha \"api/test/e2e/**/*.spec.js\""
+		"test:api": "jest --testPathPattern=api/test/unit",
+		"test:api:coverage": "jest --coverage --testPathPattern=api/test/unit",
+		"test:ui": "jest --config=test/jest.config.js"
 	},
 	"dependencies": {
 		"@sentry/node": "^5.28.0",
@@ -41,17 +42,23 @@
 		"yamljs": "^0.3.0"
 	},
 	"devDependencies": {
+		"@testing-library/dom": "^7.29.0",
+		"@testing-library/jest-dom": "^5.11.6",
+		"@testing-library/react": "^11.2.2",
+		"@testing-library/user-event": "^12.6.0",
+		"@types/jest": "^26.0.19",
 		"@types/node": "^14.14.7",
 		"@types/react": "^16.9.56",
+		"@typescript-eslint/eslint-plugin": "^4.9.1",
+		"@typescript-eslint/parser": "^4.9.1",
 		"autoprefixer": "^10.0.2",
 		"babel-eslint": "^10.1.0",
-		"chai": "^4.2.0",
-		"chai-http": "^4.3.0",
+		"babel-jest": "^26.6.3",
 		"eslint": "^7.10.0",
 		"eslint-config-prettier": "^6.12.0",
 		"eslint-plugin-prettier": "^3.1.4",
 		"eslint-plugin-react": "^7.21.5",
-		"mocha": "^8.2.1",
+		"jest": "^26.6.3",
 		"nodemon": "^2.0.6",
 		"postcss": "^8.1.10",
 		"prettier": "^2.1.2",
