@@ -30,8 +30,15 @@ const DisplayDocumentCards = () => {
 		setDocuments(resources);
 	}, []);
 
+	const clickable = () => {
+		return <div className="alert alert-success">yes</div>;
+	};
+
 	return (
-		<div className="row d-flex flex-column align-items-center">
+		<div
+			className="row d-flex flex-column align-items-center"
+			onClick={clickable}
+		>
 			{documents.map((doc, index) => {
 				return <DocumentCard id={index + 1} title={doc.title} />;
 			})}
