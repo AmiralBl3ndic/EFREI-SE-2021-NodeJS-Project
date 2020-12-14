@@ -9,8 +9,8 @@
 		"start": "next start",
 		"lint:js": "eslint --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore .",
 		"lint": "yarn lint:js",
-		"test": "mocha \"api/test/unit/**/*.spec.js\"",
-		"test:unit:coverage": "nyc mocha \"api/test/unit/**/*.spec.js\"",
+		"test": "jest --testPathPattern=api/test/unit",
+		"test:unit:coverage": "jest --coverage --testPathPattern=api/test/unit",
 		"test:e2e": "mocha \"api/test/e2e/**/*.spec.js\""
 	},
 	"dependencies": {
