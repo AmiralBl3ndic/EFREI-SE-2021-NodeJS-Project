@@ -5,7 +5,6 @@ import ApplicationStore from 'store/appstore.model';
 
 const RegisterForm: React.FC = () => {
 	const { register, handleSubmit } = useForm();
-	const [statusCode, setStatusCode] = React.useState(0);
 
 	const sendRegistering = useStoreActions<ApplicationStore>(
 		(actions) => actions.registerWithUEmailUsernameAndPassword,
@@ -19,7 +18,6 @@ const RegisterForm: React.FC = () => {
 		};
 
 		sendRegistering(objToSend);
-		setStatusCode(200);
 	};
 
 	return (
@@ -36,14 +34,6 @@ const RegisterForm: React.FC = () => {
 							Sign up to a new account
 						</h2>
 					</div>
-					<form className="mt-8 space-y-6" onSubmit={() => setStatusCode(200)}>
-						<button
-							type="submit"
-							className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-						>
-							test
-						</button>
-					</form>
 
 					<br />
 					<form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
@@ -96,17 +86,6 @@ const RegisterForm: React.FC = () => {
 					</form>
 				</div>
 			</div>
-			{statusCode == 200 ? (
-				<div className="alert alert-success" role="alert">
-					Your account has been registered
-				</div>
-			) : statusCode == 0 ? (
-				<> </>
-			) : (
-				<div className="alert alert-warning" role="alert">
-					error in the register : {statusCode}
-				</div>
-			)}
 		</>
 	);
 };
