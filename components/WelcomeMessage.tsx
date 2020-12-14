@@ -5,12 +5,12 @@ const WelcomeMessage = () => {
 		<div className="align-content-center">
 			<div className="p-2">
 				<h2 className="text-center">
-					Welcome to <b>NameOfTheProject</b> !
+					Welcome to <b>Ad Versionem</b> !
 				</h2>
 			</div>
 			<div className="p-2">
 				<p className="text-center">
-					NameOfTheProject is the easiest way to take note safely
+					Ad Versionem is the easiest way to take note safely
 				</p>
 				<p className="text-center">
 					With our unique versionning system, We offer our users the possibility
