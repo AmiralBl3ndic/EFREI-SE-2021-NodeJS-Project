@@ -1,36 +1,25 @@
-import axios from 'axios';
+import { useStoreActions } from 'easy-peasy';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import ApplicationStore from 'store/appstore.model';
 
 const RegisterForm = () => {
 	const { register, handleSubmit } = useForm();
-	const [user, setUser] = React.useState('');
-	const [email, setEmail] = React.useState('');
-	const [password, setPassword] = React.useState('');
+
+	const sendRegistering = useStoreActions<ApplicationStore>(
+		(actions) => actions.registerWithUEmailUsernameAndPassword,
+	);
 
 	const onSubmit = (data) => {
-		setUser(data.username);
-		setPassword(data.password);
-		setEmail(data.email);
+		const objToSend = {
+			username: data.username,
+			password: data.password,
+			email: data.email,
+		};
 
-		console.log(user + ' ' + password + ' ' + email);
+		console.log(objToSend);
 
-		axios
-			.post('api/auth/register', {
-				username: user,
-				password: password,
-				email: email,
-			})
-			.then((response) => {
-				console.log(response);
-			})
-			.catch((error) => console.log(error));
-
-		console.log({
-			username: user,
-			password: password,
-			email: email,
-		});
+		sendRegistering(objToSend);
 	};
 
 	return (
