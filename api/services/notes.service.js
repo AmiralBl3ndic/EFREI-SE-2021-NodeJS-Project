@@ -220,8 +220,19 @@ class NotesService {
 	 * @param {string} searchTerm Search term to query search engine with
 	 * @returns {Note[]}
 	 */
-	static searchNotes(userId, searchTerm) {
-		return [];
+	static async searchNotes(userId, searchTerm) {
+		const index = await searchEngine.getIndex(userId);
+
+		if (!index) return [];
+
+		return (
+			(await index.search(searchTerm)).hits?.map((result) => ({
+				id: result.note_id,
+				link: `/api/users/${result.username}/notes/${result.note_id}`,
+				author: result.username,
+				title: result.title,
+			})) ?? []
+		);
 	}
 }
 
