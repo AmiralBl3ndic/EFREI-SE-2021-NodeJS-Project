@@ -1,29 +1,24 @@
 import axios from 'axios';
+import { useStoreActions } from 'easy-peasy';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import ApplicationStore from 'store/appstore.model';
 
 const LoginForm = () => {
 	const { register, handleSubmit } = useForm();
-	const [user, setUser] = React.useState('');
-	const [password, setPassword] = React.useState('');
+
+	const sendLoging = useStoreActions<ApplicationStore>(
+		(actions) => actions.loginWithUsernameAndPassword,
+	);
 
 	const onSubmit = async (data) => {
-		setUser(data.username);
-		setPassword(data.password);
+		const objToSend = {
+			username: data.username,
+			password: data.password,
+		};
 
-		await axios
-			.post('http://localhost:8080/api/auth/login', {
-				username: user,
-				password: password,
-			})
-			.then((response) => {
-				console.log(response);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-
-		console.log(data);
+		sendLoging(objToSend);
+		console.log(objToSend);
 	};
 
 	return (
