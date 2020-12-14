@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS revisions (
 
 CREATE TABLE IF NOT EXISTS modifications (
 	modification_id uuid DEFAULT uuid_generate_v4(),
+	position INT NOT NULL,
 	previous TEXT,
 	modified TEXT,
 	revision uuid NOT NULL,
@@ -73,3 +74,23 @@ CREATE OR REPLACE VIEW user_notes_with_rights AS
 	ON
 		nac.note = n.note_id;
 
+-- To view all notes revisions (will be useful for populating search engine)
+CREATE OR REPLACE VIEW notes_revisions AS
+    SELECT
+        n.note_id,
+        n.title,
+        n.current_content AS "content",
+        u.username AS "author",
+        u.email AS "author_email",
+        r.revision_id AS "revision",
+        m.position AS "line",
+        m.previous AS "content_before",
+        m.modified AS "content_after"
+    FROM
+        notes n
+    LEFT JOIN
+        users u ON u.user_id = n.author
+    LEFT JOIN
+        revisions r ON r.note = n.note_id
+    LEFT JOIN
+        modifications m ON m.revision = r.revision_id;
