@@ -22,6 +22,8 @@ const requiredEnvVariables = [
 	'JWT_SECRET',
 	'SESSION_SECRET',
 	'SENTRY_DSN',
+	'MEILISEARCH_HOST',
+	'MEILISEARCH_MASTER_KEY',
 ];
 
 // Check that each required variable is set with a value that is not null nor undefined
@@ -49,6 +51,8 @@ const supabaseDbPassword = process.env.SUPABASE_DB_PASSWORD;
 const jwtSecret = process.env.JWT_SECRET;
 const sessionSecret = process.env.SESSION_SECRET;
 const sentryDsn = process.env.SENTRY_DSN;
+const meilisearchHost = process.env.MEILISEARCH_HOST;
+const meilisearchMasterKey = process.env.MEILISEARCH_MASTER_KEY;
 
 ////////////////////////////////////////////////////////////
 // Exports
@@ -66,6 +70,8 @@ module.exports = {
 	jwtSecret,
 	sessionSecret,
 	sentryDsn,
+	meilisearchHost,
+	meilisearchMasterKey,
 };
 
 module.exports.port = port;
@@ -79,3 +85,5 @@ module.exports.supabaseDbPassword = supabaseDbPassword;
 module.exports.jwtSecret = jwtSecret;
 module.exports.sessionSecret = sessionSecret;
 module.exports.sentryDsn = sentryDsn;
+module.exports.meilisearchHost = meilisearchHost;
+module.exports.meilisearchMasterKey = meilisearchMasterKey;
