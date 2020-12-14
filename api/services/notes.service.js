@@ -1,8 +1,14 @@
 const R = require('ramda');
 const Modification = require('../models/modification.model');
 const Revision = require('../models/revision.model');
+const supabase = require('../db');
+const { searchEngine } = require('../db');
 
 const groupByPosition = R.groupBy(R.prop('position'));
+
+/**
+ * @typedef NoteWithModifications
+ */
 
 /**
  * Functions and helpers related to notes
@@ -155,6 +161,65 @@ class NotesService {
 		}
 
 		return new Revision(timestamp, modifications);
+	}
+
+	/**
+	 * Populates the search engine with notes a given user has access to (read or write)
+	 * @param {string} userId Id of the user to populate search engine with notes for
+	 */
+	static async populateSearchEngineForUser(userId) {
+		const index = await searchEngine.getOrCreateIndex(userId, {
+			primaryKey: 'note_id',
+		});
+
+		// Trigger index reset or creation
+		const resetIndexPromise = index.deleteAllDocuments();
+
+		// Without waiting, retrieve data from the PostgreSQL database
+		const { error, data: notes } = await supabase
+			.from('user_notes_with_rights')
+			.select('*')
+			.eq('user_id', userId)
+			.or('can_read.eq.true,can_write.eq.true');
+
+		if (error) throw error;
+
+		// Fetch all modifications for all notes
+		/**
+		 * @type {NoteWithModifications[]}
+		 */
+		const notesWithModifications = (
+			await Promise.allSettled(
+				notes.map(async (n) => {
+					const { error, data } = await supabase
+						.from('notes_revisions')
+						.select('*')
+						.eq('note_id', n.note_id);
+
+					if (error) return null;
+
+					return {
+						...n,
+						modifications: data,
+					};
+				}),
+			)
+		).filter((p) => p != null);
+
+		// Ensure index has been created or emptied prior to doing anything else now
+		await resetIndexPromise;
+
+		return index.addDocuments(notesWithModifications);
+	}
+
+	/**
+	 * Search for notes
+	 * @param {string} userId Id of the user to perform search with
+	 * @param {string} searchTerm Search term to query search engine with
+	 * @returns {Note[]}
+	 */
+	static searchNotes(userId, searchTerm) {
+		return [];
 	}
 }
 
