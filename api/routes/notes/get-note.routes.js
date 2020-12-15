@@ -174,24 +174,19 @@ router.get(
 	async (req, res) => {
 		const { data, error } = await supabase
 			.from('revisions')
-			.select('createdat')
+			.select('createdat', 'revision_id')
 			.eq('revision_id', req.params.revisionId)
 			.limit(1);
 
-		if (error) throw new Error(error.message);
+		if (error) throw error;
 
-		const { data: data2, error: error2 } = await supabase
-			.from('modifications')
-			.select('modification_id,position,previous,modified')
-			.eq('revision', req.params.revisionId);
-
-		if (error2) throw new Error(error2.message);
-
-		return res.status(StatusCodes.OK).json({
-			username: req.params.username,
-			timestamp: data[0].createdat,
-			content: data2,
-		});
+		return res.status(StatusCodes.OK).json(
+			data.map((r) => ({
+				username: req.params.username,
+				hash: r.revision_id,
+				timestamp: r.createdAt,
+			})),
+		);
 	},
 );
 
