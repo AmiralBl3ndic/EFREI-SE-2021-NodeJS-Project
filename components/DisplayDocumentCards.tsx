@@ -23,7 +23,7 @@ const resources = [
 	{ title: "8h et demi ? l'heure du demi" },
 ];
 
-const DisplayDocumentCards = () => {
+const DisplayDocumentCards: React.FC = () => {
 	const [documents, setDocuments] = React.useState<documentProps[]>([]);
 
 	useEffect(() => {
@@ -40,7 +40,9 @@ const DisplayDocumentCards = () => {
 			onClick={clickable}
 		>
 			{documents.map((doc, index) => {
-				return <DocumentCard id={index + 1} title={doc.title} />;
+				return (
+					<DocumentCard key={index + 1} id={index + 1} title={doc.title} />
+				);
 			})}
 		</div>
 	);

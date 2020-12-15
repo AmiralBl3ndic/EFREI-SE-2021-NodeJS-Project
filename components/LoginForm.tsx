@@ -18,7 +18,6 @@ const LoginForm: React.FC = () => {
 		};
 
 		sendLoging(objToSend);
-		console.log(objToSend);
 	};
 
 	return (
