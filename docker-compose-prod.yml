@@ -3,7 +3,7 @@ version: '3.8'
 services:
   meilisearch:
     image: getmeili/meilisearch
-    container_name: meilisearch
+    container_name: ad_versionem-meilisearch
     ports:
       - 7700
     networks:
@@ -11,12 +11,15 @@ services:
 
   ad_versionem:
     build: .
+    container_name: ad_versionem
     ports:
       - 8080:8080
     networks:
       - search_engine
+    env_file:
+      - .env
     environment:
-      - MEILISEARCH_HOST="http://meilisearch:7700"
+      - MEILISEARCH_HOST=http://meilisearch:7700
 
 networks:
   search_engine:
