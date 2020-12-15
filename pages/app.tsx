@@ -23,6 +23,10 @@ const AppPage: NextPage = () => {
 		(actions) => actions.setCurrentNote,
 	);
 
+	const createRevisionForCurrentNote = useStoreActions<ApplicationStore>(
+		(actions) => actions.createRevision,
+	);
+
 	const notes = useStoreState<ApplicationStore>((state) => state.notes);
 
 	const router = useRouter();
@@ -68,7 +72,10 @@ const AppPage: NextPage = () => {
 								<h1>{currentNote?.title || ''}</h1>
 
 								{/* TODO: make this button add a revision */}
-								<button className="btn btn-lg btn-primary">
+								<button
+									className="btn btn-lg btn-primary"
+									onClick={() => createRevisionForCurrentNote()}
+								>
 									Create new revision
 								</button>
 							</header>

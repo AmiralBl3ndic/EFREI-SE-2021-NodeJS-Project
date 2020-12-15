@@ -75,6 +75,10 @@ const store = createStore<ApplicationStore>({
 			});
 	}),
 
+	setNotes: action((state, payload) => {
+		state.notes = payload;
+	}),
+
 	setCurrentNote: action((state, payload) => {
 		state.currentNote = payload;
 	}),
@@ -105,34 +109,73 @@ const store = createStore<ApplicationStore>({
 	uploadNewNote: thunk((actions, { title }, { getState }) => {
 		const { currentUser } = getState();
 
-		$axios
-			.post(
-				`/users/${getState().currentUser.username}/notes`,
-				{
-					title,
-				},
-				{
-					headers: {
-						Authorization: `Bearer ${getState().currentUser.token}`,
+		if (title) {
+			$axios
+				.post(
+					`/users/${getState().currentUser.username}/notes`,
+					{
+						title,
 					},
-				},
-			)
-			.then((res) => {
-				const newNote = {
-					id: res.data.id,
-					author: currentUser.username,
-					title: res.data.title,
-					content: '',
-					lastModified: new Date().toISOString(),
-					link: res.data.link,
-				};
+					{
+						headers: {
+							Authorization: `Bearer ${getState().currentUser.token}`,
+						},
+					},
+				)
+				.then((res) => {
+					const newNote = {
+						id: res.data.id,
+						author: currentUser.username,
+						title: res.data.title,
+						content: '',
+						lastModified: new Date().toISOString(),
+						link: res.data.link,
+					};
 
-				actions.addNote(newNote);
-				actions.setCurrentNote(newNote);
-			})
-			.catch((err) => {
-				console.error(err);
-			});
+					actions.addNote(newNote);
+					actions.setCurrentNote(newNote);
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+		}
+	}),
+
+	createRevision: thunk((actions, _, { getState }) => {
+		const { currentUser, currentNote, noteContent, notes } = getState();
+
+		if (currentUser && currentNote && noteContent != null) {
+			$axios
+				.post(
+					`/users/${currentUser.username}/notes/${currentNote.id}/revisions`,
+					{
+						content: noteContent,
+					},
+					{
+						headers: {
+							Authorization: `Bearer ${currentUser.token}`,
+						},
+					},
+				)
+				.then((res) => {
+					const updatedNote = {
+						...currentNote,
+						content: res.data.contentAfter,
+						lastModified: res.data.timestamp,
+					};
+
+					actions.setCurrentNote(updatedNote);
+
+					actions.setNotes(
+						notes.map((note) =>
+							note.id === updatedNote.id ? updatedNote : note,
+						),
+					);
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+		}
 	}),
 
 	////////////////////////////////////////////////////////////

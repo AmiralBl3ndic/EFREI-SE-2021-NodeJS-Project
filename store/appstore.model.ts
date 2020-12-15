@@ -31,6 +31,8 @@ export default interface ApplicationStore {
 
 	getAllNoteOfUser: Thunk<ApplicationStore>;
 
+	setNotes: Action<ApplicationStore, Note[]>;
+
 	// ======== Note/Revision =======
 	addRevision: Action<ApplicationStore, Revision>;
 
@@ -41,6 +43,8 @@ export default interface ApplicationStore {
 	setCurrentNote: Action<ApplicationStore, Note>;
 
 	uploadNewNote: Thunk<ApplicationStore, { title: string }>;
+
+	createRevision: Thunk<ApplicationStore>;
 
 	////////////////////////////////////////////////////////////
 	// Editor
