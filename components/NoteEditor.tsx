@@ -13,6 +13,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
 	return (
 		<div role="article">
 			<Editor
+				defaultValue={initialNoteContent ?? ''}
 				value={initialNoteContent}
 				onChange={(v) => onChange(v())}
 				className="px-5 min-h-1/2"
