@@ -104,7 +104,7 @@ const AppPage: NextPage = () => {
 								create new revision
 							</button>
 						</div>
-						<ul className="w-full">
+						<ul className="w-full my-2">
 							{new Array(100).fill(undefined).map((_, idx) => (
 								<li
 									key={idx}
