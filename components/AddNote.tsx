@@ -1,18 +1,27 @@
 import Modal from 'react-bootstrap/Modal';
 import React from 'react';
 import { useStoreActions } from 'easy-peasy';
+import { useForm } from 'react-hook-form';
+
 import ApplicationStore from 'store/appstore.model';
 
 const AddNote: React.FC = () => {
 	const [show, setShow] = React.useState(false);
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
+	const { register, handleSubmit } = useForm();
 
 	const sendAddNote = useStoreActions<ApplicationStore>(
 		(actions) => actions.addNote,
 	);
 
-	const AddNoteAction = () => {
+	const AddNoteAction = (data) => {
+		const objToSend = {
+			title: data.title,
+		};
+
+		console.log(objToSend);
+
 		handleClose();
 	};
 
@@ -41,7 +50,14 @@ const AddNote: React.FC = () => {
 							<span></span>
 						</div>
 						<div className="col-md-10">
-							<input placeholder="please write your title" className="w-full" />
+							<form onSubmit={handleSubmit(AddNoteAction)}>
+								<input
+									name="title"
+									placeholder="please write your title"
+									className="w-full"
+									ref={register({ required: true })}
+								/>
+							</form>
 						</div>
 					</div>
 				</Modal.Body>
@@ -53,6 +69,7 @@ const AddNote: React.FC = () => {
 						cancel
 					</button>
 					<button
+						type="submit"
 						className="btn btn-outline-success btn-sm"
 						onClick={AddNoteAction}
 					>
