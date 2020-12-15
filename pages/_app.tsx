@@ -4,11 +4,15 @@ import 'tailwindcss/tailwind.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import { Windmill } from '@windmill/react-ui';
+import store from 'store/app.store';
+import { StoreProvider } from 'easy-peasy';
 
 function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<Windmill>
-			<Component {...pageProps} />
+			<StoreProvider store={store}>
+				<Component {...pageProps} />
+			</StoreProvider>
 		</Windmill>
 	);
 }

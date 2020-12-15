@@ -3,10 +3,9 @@ import axios from 'axios';
 import { Note, Revision, User } from './frontend.types';
 import ApplicationStore from './appstore.model';
 
-
 const $axios = axios.create({
 	baseURL: 'http://localhost:8080/api', // TODO: change to a Environmental variable
-})
+});
 
 const store = createStore<ApplicationStore>({
 	// ======== State ========
@@ -19,29 +18,34 @@ const store = createStore<ApplicationStore>({
 		state.currentUser = userInfo;
 	}),
 
-	loginWithUsernameAndPassword: thunk((actions, {username, password}) => {
-		$axios.post<User>('/auth/login', {
-			username,
-			password,
-		}).then(res => {
-			actions.setUser(res.data)
-		}).catch(err => {
-			console.error(err) // TODO: check error type and show message accordingly
-		})
+	loginWithUsernameAndPassword: thunk((actions, { username, password }) => {
+		$axios
+			.post<User>('/auth/login', {
+				username,
+				password,
+			})
+			.then((res) => {
+				actions.setUser(res.data);
+			})
+			.catch((err) => {
+				console.error(err); // TODO: check error type and show message accordingly
+			});
 	}),
 
 	registerWithUEmailUsernameAndPassword: thunk((actions, registerData) => {
-		$axios.post<User>('/auth/login', registerData)
-			.then(res => {
-			actions.setUser(res.data)
-		}).catch(err => {
-			console.error(err) // TODO: check error type and show message accordingly
-		})
+		$axios
+			.post<User>('/auth/login', registerData)
+			.then((res) => {
+				actions.setUser(res.data);
+			})
+			.catch((err) => {
+				console.error(err); // TODO: check error type and show message accordingly
+			});
 	}),
 
 	// ======== Notes ==========
 	addNote: action((state, noteData) => {
-			state.notes.push(noteData);
+		state.notes.push(noteData);
 	}),
 
 	addMultipleNotes: action((state, notes) => {
@@ -49,22 +53,22 @@ const store = createStore<ApplicationStore>({
 	}),
 
 	resetNotes: action((state) => {
-		state.notes = []
+		state.notes = [];
 	}),
 
 	getAllNoteOfUser: thunk((actions, _, { getState }) => {
 		if (getState().currentUser === null) throw new Error('User not logged in');
-		$axios.get<Note[]>(`/users/${getState().currentUser.username}/notes`, {
-			headers: {
-				'Authorization': `Bearer ${getState().currentUser.token}`
-			}
-		})
-			.then(res => {
-					actions.addMultipleNotes(res.data);
+		$axios
+			.get<Note[]>(`/users/${getState().currentUser.username}/notes`, {
+				headers: {
+					Authorization: `Bearer ${getState().currentUser.token}`,
+				},
 			})
-			.catch(err => console.error(err))
+			.then((res) => {
+				actions.addMultipleNotes(res.data);
+			})
+			.catch((err) => console.error(err));
 	}),
-
 
 	// ======== Note/Revision =======
 	addRevision: action((state, revision) => {
@@ -77,15 +81,17 @@ const store = createStore<ApplicationStore>({
 
 	getRevisionForNote: thunk((actions, noteId, { getState }) => {
 		if (getState().currentUser === null) throw new Error('User not logged in');
-		const note = getState().notes.find(note => note.id === noteId)
+		const note = getState().notes.find((note) => note.id === noteId);
 		// TODO: catch error if note is undefined
-		$axios.get<Revision[]>(`/users/${getState().currentUser.username}/notes/${note.id}/revisions`)
-			.then(res => {
+		$axios
+			.get<Revision[]>(
+				`/users/${getState().currentUser.username}/notes/${note.id}/revisions`,
+			)
+			.then((res) => {
 				actions.addMultipleRevision(res.data);
 			})
-			.catch(err => console.error(err))
-	})
-
+			.catch((err) => console.error(err));
+	}),
 });
 
 export default store;
