@@ -12,6 +12,11 @@ const DocumentCard: React.FC<DocumentCardProps> = ({ note }) => {
 		(actions) => actions.setCurrentNote,
 	);
 
+	const checkIDSize = (id: string) => {
+		const words = id.split('-');
+		return words[0] + '...';
+	};
+
 	return (
 		<div className="bg-light w-full rounded-2xl my-2 cursor-pointer">
 			<div className="card-content">
@@ -21,8 +26,8 @@ const DocumentCard: React.FC<DocumentCardProps> = ({ note }) => {
 							<i className="gg-file-document"></i>
 						</div>
 						<div className="media-body text-right">
-							<h3>Note #{note.id}</h3>
-							<span>{note.title}</span>
+							<h3>{note.title}</h3>
+							<span>{checkIDSize(note.id)}</span>
 						</div>
 					</div>
 				</div>
