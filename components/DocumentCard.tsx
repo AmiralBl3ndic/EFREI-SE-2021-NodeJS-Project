@@ -7,7 +7,7 @@ interface DocumentCardProps {
 
 const DocumentCard: React.SFC<DocumentCardProps> = ({ id, title }) => {
 	return (
-		<div className="bg-light w-75 rounded-2xl my-2">
+		<div className="bg-light w-full rounded-2xl my-2 cursor-pointer">
 			<div className="card-content">
 				<div className="card-body">
 					<div className="media d-flex">
