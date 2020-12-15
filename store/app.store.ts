@@ -4,7 +4,7 @@ import { Note, Revision, User } from './frontend.types';
 import ApplicationStore from './appstore.model';
 
 const $axios = axios.create({
-	baseURL: 'http://localhost:8080/api', // TODO: change to a Environmental variable
+	baseURL: '/api', // TODO: change to a Environmental variable
 });
 
 const store = createStore<ApplicationStore>({
