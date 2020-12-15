@@ -53,8 +53,8 @@ const AppPage: NextPage = () => {
 				>
 					<h2 className="text-xl">Notes</h2>
 					<div className="w-full px-3 flex flex-col align-items-center overflow-y-scroll">
+						<AddNote />
 						<ul>
-							<AddNote />
 							{notes.map((note) => (
 								<li key={note.id} onClick={() => setCurrentNote(note)}>
 									<DocumentCard note={note} key={note.id} />
@@ -71,7 +71,6 @@ const AppPage: NextPage = () => {
 								{/* TODO: make this editable */}
 								<h1>{currentNote?.title || ''}</h1>
 
-								{/* TODO: make this button add a revision */}
 								<button
 									className="btn btn-lg btn-primary"
 									onClick={() => createRevisionForCurrentNote()}
@@ -98,11 +97,18 @@ const AppPage: NextPage = () => {
 
 				<aside
 					role="complementary"
-					className="col-span-1 flex flex-col align-items-center max-h-full"
+					className="col-span-2 flex flex-col align-items-center max-h-full"
 				>
 					<h2 className="text-lg">Revisions</h2>
 
 					<div className="w-full px-3 flex flex-col align-items-center overflow-y-scroll">
+						{/* TODO: make this button add a revision */}
+
+						<div className="my-3">
+							<button className="btn btn-outline-danger btn-lg btn-block">
+								add new revision
+							</button>
+						</div>
 						<ul className="w-full">
 							{new Array(100).fill(undefined).map((_, idx) => (
 								<li
