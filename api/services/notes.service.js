@@ -88,7 +88,27 @@ class NotesService {
 				.map((l, idx) => new Modification(idx + 1, undefined, l)),
 		);
 	}
+	/**
+	 * Returns the note associated with a username
+	 * @param {string} username username of the potential note author
+	 * @returns {[Notes]} list of notes from that user
+	 * */
+	static async getNoteFromUsername(username) {
+		const { data, error } = await supabase
+			.from('user_notes_with_rights')
+			.select(`title, current_content, note_id`)
+			.eq('username', username);
+		if (error) throw new Error(error.message);
 
+		const notes = data.map((item) => ({
+			id: item.note_id,
+			title: item.title,
+			content: item.current_content,
+			link: '/api/users/' + username + '/' + item.note_id,
+		}));
+
+		return notes;
+	}
 	/**
 	 * Compute the new content of a note after some revisions are applied to it
 	 * @param {string} content Content of the note to work on
