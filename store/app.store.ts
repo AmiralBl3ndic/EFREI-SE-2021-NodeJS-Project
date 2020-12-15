@@ -4,14 +4,25 @@ import { Note, Revision, User } from './frontend.types';
 import ApplicationStore from './appstore.model';
 
 const $axios = axios.create({
-	baseURL: 'http://localhost:8080/api', // TODO: change to a Environmental variable
+	baseURL: '/api', // TODO: change to a Environmental variable
 });
+
+const testNote: Note = {
+	id: 'f89d47ef-f3c2-48e6-b265-dae5a6af17c9',
+	title: 'QDROGMINSEDTGBNUOIMETSDBMIONU',
+	content: '# Hello this is a test content',
+	author: 'camille',
+	link: '/api/users/camille/notes/f89d47ef-f3c2-48e6-b265-dae5a6af17c9',
+	lastModified: new Date().toISOString(),
+};
 
 const store = createStore<ApplicationStore>({
 	// ======== State ========
 	currentUser: null,
-	notes: [],
+	notes: [testNote],
 	revisions: [],
+	noteContent: '',
+	currentNote: testNote,
 
 	// ======== Auth =========
 	setUser: action((state, userInfo) => {
@@ -26,6 +37,7 @@ const store = createStore<ApplicationStore>({
 			})
 			.then((res) => {
 				actions.setUser(res.data);
+				actions.getAllNoteOfUser();
 			})
 			.catch((err) => {
 				console.error(err); // TODO: check error type and show message accordingly
@@ -67,7 +79,13 @@ const store = createStore<ApplicationStore>({
 			.then((res) => {
 				actions.addMultipleNotes(res.data);
 			})
-			.catch((err) => console.error(err));
+			.catch((err) => {
+				console.error(err);
+			});
+	}),
+
+	setCurrentNote: action((state, payload) => {
+		state.currentNote = payload;
 	}),
 
 	// ======== Note/Revision =======
@@ -91,6 +109,46 @@ const store = createStore<ApplicationStore>({
 				actions.addMultipleRevision(res.data);
 			})
 			.catch((err) => console.error(err));
+	}),
+
+	uploadNewNote: thunk((actions, { title }, { getState }) => {
+		const { currentUser } = getState();
+
+		$axios
+			.post(
+				`/users/${getState().currentUser.username}/notes`,
+				{
+					title,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${getState().currentUser.token}`,
+					},
+				},
+			)
+			.then((res) => {
+				const newNote = {
+					id: res.data.id,
+					author: currentUser.username,
+					title: res.data.title,
+					content: '',
+					lastModified: new Date().toISOString(),
+					link: res.data.link,
+				};
+
+				actions.addNote(newNote);
+				actions.setCurrentNote(newNote);
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+	}),
+
+	////////////////////////////////////////////////////////////
+	// Editor
+	////////////////////////////////////////////////////////////
+	setNoteContent: action((state, payload) => {
+		state.noteContent = payload;
 	}),
 });
 

@@ -1,13 +1,19 @@
 import React from 'react';
+import { useStoreActions } from 'easy-peasy';
+import ApplicationStore from '../store/appstore.model';
+import { Note } from '../store/frontend.types';
 
 interface DocumentCardProps {
-	id: number;
-	title: string;
+	note: Note;
 }
 
-const DocumentCard: React.SFC<DocumentCardProps> = ({ id, title }) => {
+const DocumentCard: React.FC<DocumentCardProps> = ({ note }) => {
+	const setCurrentNote = useStoreActions<ApplicationStore>(
+		(actions) => actions.setCurrentNote,
+	);
+
 	return (
-		<div className="bg-light w-75 rounded-2xl my-2">
+		<div className="bg-light w-full rounded-2xl my-2 cursor-pointer">
 			<div className="card-content">
 				<div className="card-body">
 					<div className="media d-flex">
@@ -15,8 +21,8 @@ const DocumentCard: React.SFC<DocumentCardProps> = ({ id, title }) => {
 							<i className="gg-file-document"></i>
 						</div>
 						<div className="media-body text-right">
-							<h3>Note #{id}</h3>
-							<span>{title}</span>
+							<h3>Note #{note.id}</h3>
+							<span>{note.title}</span>
 						</div>
 					</div>
 				</div>

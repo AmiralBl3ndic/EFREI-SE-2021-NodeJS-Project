@@ -26,4 +26,3 @@ export interface Revision {
 	changes: Change[];
 	message: string;
 }
-

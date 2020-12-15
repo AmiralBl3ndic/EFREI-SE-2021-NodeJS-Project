@@ -1,9 +1,9 @@
 import { render } from '../test-utils';
-import Home from '../../pages/home';
+import AppPage from '../../pages/app';
 
-describe('pages/<Home />', () => {
+describe('pages/<AppPage />', () => {
 	describe('Layout structure', () => {
-		const { getByRole } = render(<Home />);
+		const { getByRole } = render(<AppPage />);
 
 		it('has a notes explorer with navigation ARIA role', () => {
 			getByRole('navigation');

@@ -12,6 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<>
 			<Head>
+				<title>Ad Versionem</title>
 				<link rel="icon" href="/ad-versionem-favicon.png" />
 			</Head>
 

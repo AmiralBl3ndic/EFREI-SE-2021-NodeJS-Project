@@ -7,14 +7,13 @@ module.exports = {
 		jest: true,
 	},
 	parserOptions: {
-		parser: 'babel-eslint',
+		parser: '@typescript-eslint/parser',
 		ecmaVersion: 2020,
 		sourceType: 'module',
 	},
 	extends: [
 		'prettier',
 		'plugin:prettier/recommended',
-		'plugin:react/recommended',
 		'plugin:@typescript-eslint/eslint-recommended',
 		'plugin:@typescript-eslint/recommended',
 	],

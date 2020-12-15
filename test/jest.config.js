@@ -1,7 +1,7 @@
 module.exports = {
 	setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 
-	testMatch: ['<rootDir>/pages/*.spec.tsx'],
+	testMatch: ['<rootDir>/**/*.spec.tsx'],
 
 	testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
 };

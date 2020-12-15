@@ -4,7 +4,11 @@ const windmill = require('@windmill/react-ui/config');
 module.exports = windmill({
 	purge: ['./components/**/*.{js,ts,jsx,tsx}', './pages/**/*.{js,ts,jsx,tsx}'],
 	theme: {
-		extend: {},
+		extend: {
+			minHeight: {
+				'1/2': '50%',
+			},
+		},
 	},
 	variants: {},
 	plugins: [],
