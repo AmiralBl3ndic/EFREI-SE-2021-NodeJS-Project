@@ -5,7 +5,6 @@ import { useStoreActions, useStoreState } from 'easy-peasy';
 import ApplicationStore from '../store/appstore.model';
 import { useRouter } from 'next/router';
 import DocumentCard from '../components/DocumentCard';
-import Editor from 'rich-markdown-editor';
 import { Note } from '../store/frontend.types';
 import NoteEditor from '../components/NoteEditor';
 import AddNote from 'components/AddNote';
