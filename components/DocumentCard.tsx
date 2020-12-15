@@ -17,6 +17,17 @@ const DocumentCard: React.FC<DocumentCardProps> = ({ note }) => {
 		return words[0] + '...';
 	};
 
+	const checkTitleSize = (title: string) => {
+		let titleArranged = '';
+		if (title.length > 15) {
+			const words = title.slice(0, 15).split(' ');
+			for (let i = 0; i < words.length - 1; i++) {
+				titleArranged += words[i] + ' ';
+			}
+		}
+		return title.length > 15 ? titleArranged : title;
+	};
+
 	return (
 		<div className="bg-light w-full rounded-2xl my-2 cursor-pointer">
 			<div className="card-content">
@@ -26,7 +37,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({ note }) => {
 							<i className="gg-file-document"></i>
 						</div>
 						<div className="media-body text-right">
-							<h3>{note.title}</h3>
+							<h3>{checkTitleSize(note.title)}</h3>
 							<span>{checkIDSize(note.id)}</span>
 						</div>
 					</div>
