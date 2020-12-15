@@ -40,6 +40,8 @@ export default interface ApplicationStore {
 
 	setCurrentNote: Action<ApplicationStore, Note>;
 
+	uploadNewNote: Thunk<ApplicationStore, { title: string }>;
+
 	////////////////////////////////////////////////////////////
 	// Editor
 	////////////////////////////////////////////////////////////

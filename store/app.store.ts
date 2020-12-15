@@ -111,6 +111,39 @@ const store = createStore<ApplicationStore>({
 			.catch((err) => console.error(err));
 	}),
 
+	uploadNewNote: thunk((actions, { title }, { getState }) => {
+		const { currentUser } = getState();
+
+		$axios
+			.post(
+				`/users/${getState().currentUser.username}/notes`,
+				{
+					title,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${getState().currentUser.token}`,
+					},
+				},
+			)
+			.then((res) => {
+				const newNote = {
+					id: res.data.id,
+					author: currentUser.username,
+					title: res.data.title,
+					content: '',
+					lastModified: new Date().toISOString(),
+					link: res.data.link,
+				};
+
+				actions.addNote(newNote);
+				actions.setCurrentNote(newNote);
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+	}),
+
 	////////////////////////////////////////////////////////////
 	// Editor
 	////////////////////////////////////////////////////////////
