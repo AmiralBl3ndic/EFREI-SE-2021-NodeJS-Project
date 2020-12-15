@@ -5,10 +5,10 @@ import { useStoreActions, useStoreState } from 'easy-peasy';
 import ApplicationStore from '../store/appstore.model';
 import { useRouter } from 'next/router';
 import DocumentCard from '../components/DocumentCard';
-import Editor from 'rich-markdown-editor';
 import { Note } from '../store/frontend.types';
 import NoteEditor from '../components/NoteEditor';
 import AddNote from 'components/AddNote';
+import AddRevision from 'components/AddRevision';
 
 const AppPage: NextPage = () => {
 	const setNoteContent = useStoreActions<ApplicationStore>(
@@ -21,10 +21,6 @@ const AppPage: NextPage = () => {
 
 	const setCurrentNote = useStoreActions<ApplicationStore>(
 		(actions) => actions.setCurrentNote,
-	);
-
-	const createRevisionForCurrentNote = useStoreActions<ApplicationStore>(
-		(actions) => actions.createRevision,
 	);
 
 	const notes = useStoreState<ApplicationStore>((state) => state.notes);
@@ -93,28 +89,7 @@ const AppPage: NextPage = () => {
 					className="col-span-2 flex flex-col align-items-center max-h-full"
 				>
 					<h2 className="text-lg">Revisions</h2>
-
-					<div className="w-full px-3 flex flex-col align-items-center overflow-y-scroll">
-						{/* TODO: make this button add a revision */}
-						<div className="my-1">
-							<button
-								className="btn btn-outline-primary btn-lg btn-block"
-								onClick={() => createRevisionForCurrentNote()}
-							>
-								create new revision
-							</button>
-						</div>
-						<ul className="w-full my-2">
-							{new Array(100).fill(undefined).map((_, idx) => (
-								<li
-									key={idx}
-									className="bg-light rounded-lg mb-2 cursor-pointer"
-								>
-									#{idx + 1}
-								</li>
-							))}
-						</ul>
-					</div>
+					<AddRevision />
 				</aside>
 			</main>
 		</>
