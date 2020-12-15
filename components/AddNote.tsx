@@ -1,11 +1,24 @@
 import Modal from 'react-bootstrap/Modal';
 import React from 'react';
+import { useStoreActions } from 'easy-peasy';
+import ApplicationStore from 'store/appstore.model';
 
 const AddNote: React.FC = () => {
 	const [show, setShow] = React.useState(false);
-
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
+
+	const sendAddNote = useStoreActions<ApplicationStore>(
+		(actions) => actions.addNote,
+	);
+
+	const AddNoteAction = () => {
+		handleClose();
+	};
+
+	const CancelNoteAction = () => {
+		handleClose();
+	};
 
 	return (
 		<>
@@ -35,13 +48,13 @@ const AddNote: React.FC = () => {
 				<Modal.Footer>
 					<button
 						className="btn btn-outline-danger btn-sm"
-						onClick={handleClose}
+						onClick={CancelNoteAction}
 					>
 						cancel
 					</button>
 					<button
 						className="btn btn-outline-success btn-sm"
-						onClick={handleClose}
+						onClick={AddNoteAction}
 					>
 						add note
 					</button>
