@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import AddNote from './AddNote';
 import DocumentCard from './DocumentCard';
 
 interface documentProps {
@@ -23,7 +24,7 @@ const resources = [
 	{ title: "8h et demi ? l'heure du demi" },
 ];
 
-const DisplayDocumentCards = () => {
+const DisplayDocumentCards: React.FC = () => {
 	const [documents, setDocuments] = React.useState<documentProps[]>([]);
 
 	useEffect(() => {
@@ -39,8 +40,11 @@ const DisplayDocumentCards = () => {
 			className="row d-flex flex-column align-items-center"
 			onClick={clickable}
 		>
+			<AddNote />
 			{documents.map((doc, index) => {
-				return <DocumentCard id={index + 1} title={doc.title} />;
+				return (
+					<DocumentCard key={index + 1} id={index + 1} title={doc.title} />
+				);
 			})}
 		</div>
 	);

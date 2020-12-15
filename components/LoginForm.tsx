@@ -11,14 +11,13 @@ const LoginForm: React.FC = () => {
 		(actions) => actions.loginWithUsernameAndPassword,
 	);
 
-	const onSubmit = async (data) => {
+	const onSubmit = (data) => {
 		const objToSend = {
 			username: data.username,
 			password: data.password,
 		};
 
 		sendLoging(objToSend);
-		console.log(objToSend);
 	};
 
 	return (
