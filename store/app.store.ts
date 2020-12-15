@@ -178,6 +178,34 @@ const store = createStore<ApplicationStore>({
 		}
 	}),
 
+	updateCurrentNoteTitle: thunk((actions, { title }, { getState }) => {
+		const { currentUser, currentNote, notes } = getState();
+
+		if (title && title !== currentNote.title) {
+			$axios
+				.patch(
+					`/users/${currentUser.username}/notes/${currentNote.id}`,
+					{ title },
+					{
+						headers: {
+							Authorization: `Bearer ${currentUser.token}`,
+						},
+					},
+				)
+				.then(() => {
+					const updatedNote = {
+						...currentNote,
+						title,
+					};
+
+					actions.setCurrentNote(updatedNote);
+					actions.setNotes(
+						notes.map((n) => (n.id === updatedNote.id ? updatedNote : n)),
+					);
+				});
+		}
+	}),
+
 	////////////////////////////////////////////////////////////
 	// Editor
 	////////////////////////////////////////////////////////////

@@ -46,6 +46,8 @@ export default interface ApplicationStore {
 
 	createRevision: Thunk<ApplicationStore>;
 
+	updateCurrentNoteTitle: Thunk<ApplicationStore, { title: string }>;
+
 	////////////////////////////////////////////////////////////
 	// Editor
 	////////////////////////////////////////////////////////////
