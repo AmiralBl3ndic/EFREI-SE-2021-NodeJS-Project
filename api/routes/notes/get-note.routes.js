@@ -149,14 +149,14 @@ router.delete(
 	'/users/:username/notes/:noteId/revisions/:revisionId',
 	isAuthor,
 	async (req, res) => {
-		const { data, error } = await supabase
+		const { error } = await supabase
 			.from('modifications')
 			.delete()
 			.match({ revision: req.params.revisionId });
 
 		if (error) throw error;
 
-		const { data: data2, error: error2 } = await supabase
+		const { error: error2 } = await supabase
 			.from('revisions')
 			.delete()
 			.match({ revision_id: req.params.revisionId });
