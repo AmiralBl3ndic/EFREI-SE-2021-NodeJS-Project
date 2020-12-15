@@ -49,8 +49,8 @@ const AppPage: NextPage = () => {
 				>
 					<h2 className="text-xl">Notes</h2>
 					<div className="w-full px-3 flex flex-col align-items-center overflow-y-scroll">
+						<AddNote />
 						<ul>
-							<AddNote />
 							{notes.map((note) => (
 								<li key={note.id} onClick={() => setCurrentNote(note)}>
 									<DocumentCard note={note} key={note.id} />

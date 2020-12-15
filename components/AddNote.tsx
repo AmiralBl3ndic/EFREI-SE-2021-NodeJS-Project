@@ -26,7 +26,7 @@ const AddNote: React.FC = () => {
 		<>
 			<button
 				type="button"
-				className="btn btn-outline-success btn-lg"
+				className="btn btn-outline-success btn-lg btn-block"
 				onClick={handleShow}
 			>
 				Create new note
