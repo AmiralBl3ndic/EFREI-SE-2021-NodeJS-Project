@@ -34,10 +34,10 @@ const Index: NextPage = () => {
 							id="uncontrolled-tab-example"
 							className="justify-content-center"
 						>
-							<Tab eventKey="home" title="Sign in">
+							<Tab eventKey="home" title="Register">
 								<RegisterForm />
 							</Tab>
-							<Tab eventKey="profile" title="Sign up">
+							<Tab eventKey="profile" title="Login">
 								<LoginForm />
 							</Tab>
 						</Tabs>
