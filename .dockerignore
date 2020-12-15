@@ -1,0 +1,14 @@
+node_modules/
+.next/
+.nyc_output/
+coverage/
+.env
+.env.example
+.editorconfig
+.eslintrc.js
+.git/
+.gitignore
+.prettierrc
+docker-compose.yml
+docker-compose-prod.yml
+Dockerfile
