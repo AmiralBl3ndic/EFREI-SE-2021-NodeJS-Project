@@ -98,6 +98,8 @@ class NotesService {
 			.from('user_notes_with_rights')
 			.select(`title, current_content, note_id`)
 			.eq('username', username);
+		if (error) throw new Error(error.message);
+
 		const notes = data.map((item) => ({
 			id: item.note_id,
 			title: item.title,
