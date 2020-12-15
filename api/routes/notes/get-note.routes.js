@@ -168,31 +168,26 @@ router.delete(
 );
 
 // Retrieve note's revisions
-router.get('/users/:username/notes/:noteId', isAuthor, async (req, res) => {
-	const { data, error } = await supabase
-		.from('revisions')
-		.select('createdat, revision_id')
-		.eq('note', req.params.noteId);
+router.get(
+	'/users/:username/notes/:noteId/revisions',
+	isAuthor,
+	async (req, res) => {
+		const { data, error } = await supabase
+			.from('revisions')
+			.select('createdat, revision_id')
+			.order('createdat', { ascending: false })
+			.eq('note', req.params.noteId);
 
-	if (error) throw error;
+		if (error) throw error;
 
-	var modification_data = [];
-
-	for (id in data.revision_id) {
-		const { data: data2, error: error2 } = await supabase
-			.from('modifications')
-			.select('modification_id,position,previous,modified')
-			.eq('revision', id);
-		modification_data.push(data2[0]);
-	}
-
-	if (error2) throw error2;
-
-	return res.status(StatusCodes.OK).json({
-		username: req.params.username,
-		timestamp: data[0].createdat,
-		content: modification_data,
-	});
-});
+		return res.status(StatusCodes.OK).json(
+			data.map((r) => ({
+				username: req.params.username,
+				hash: r.revision_id,
+				timestamp: r.createdAt,
+			})),
+		);
+	},
+);
 
 module.exports = router;
