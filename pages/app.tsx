@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import DocumentCard from '../components/DocumentCard';
 import Editor from 'rich-markdown-editor';
 import { Note } from '../store/frontend.types';
+import NoteEditor from '../components/NoteEditor';
 
 const AppPage: NextPage = () => {
 	const setNoteContent = useStoreActions<ApplicationStore>(
@@ -15,6 +16,10 @@ const AppPage: NextPage = () => {
 
 	const currentNote: Note = useStoreState<ApplicationStore>(
 		(state) => state.currentNote,
+	);
+
+	const setCurrentNote = useStoreActions<ApplicationStore>(
+		(actions) => actions.setCurrentNote,
 	);
 
 	const notes = useStoreState<ApplicationStore>((state) => state.notes);
@@ -45,7 +50,7 @@ const AppPage: NextPage = () => {
 					<div className="w-full px-3 flex flex-col align-items-center overflow-y-scroll">
 						<ul>
 							{notes.map((note) => (
-								<li key={note.id}>
+								<li key={note.id} onClick={() => setCurrentNote(note)}>
 									<DocumentCard note={note} key={note.id} />
 								</li>
 							))}
@@ -66,17 +71,10 @@ const AppPage: NextPage = () => {
 								</button>
 							</header>
 
-							<div role="article">
-								<Editor
-									template={false}
-									defaultValue={currentNote?.content ?? ''}
-									onChange={(v) => {
-										setNoteContent(v);
-										console.log(v());
-									}}
-									className="px-5 min-h-1/2"
-								/>
-							</div>
+							<NoteEditor
+								initialNoteContent={currentNote.content}
+								onChange={setNoteContent}
+							/>
 						</>
 					) : (
 						<>

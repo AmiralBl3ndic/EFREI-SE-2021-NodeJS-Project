@@ -7,22 +7,13 @@ const $axios = axios.create({
 	baseURL: '/api', // TODO: change to a Environmental variable
 });
 
-const testNote: Note = {
-	id: 'f89d47ef-f3c2-48e6-b265-dae5a6af17c9',
-	title: 'QDROGMINSEDTGBNUOIMETSDBMIONU',
-	content: '# Hello this is a test content',
-	author: 'camille',
-	link: '/api/users/camille/notes/f89d47ef-f3c2-48e6-b265-dae5a6af17c9',
-	lastModified: new Date().toISOString(),
-};
-
 const store = createStore<ApplicationStore>({
 	// ======== State ========
 	currentUser: null,
-	notes: [testNote],
+	notes: [],
 	revisions: [],
 	noteContent: '',
-	currentNote: testNote,
+	currentNote: null,
 
 	// ======== Auth =========
 	setUser: action((state, userInfo) => {
