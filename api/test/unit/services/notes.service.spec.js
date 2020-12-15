@@ -188,10 +188,10 @@ describe('NotesService', () => {
 				contentAfter,
 			);
 
-			expect(revision.modification.length).to.eq(1);
-			expect(revision.modification[0].position).to.eq(1);
-			expect(revision.modification[0].before).to.eq(undefined);
-			expect(revision.modification[0].after).to.eq(contentAfter);
+			expect(revision.modification.length).toBe(1);
+			expect(revision.modification[0].position).toBe(1);
+			expect(revision.modification[0].before).toBe(undefined);
+			expect(revision.modification[0].after).toBe(contentAfter);
 		});
 
 		it('# works for a single line difference', () => {
@@ -203,10 +203,10 @@ describe('NotesService', () => {
 				contentAfter,
 			);
 
-			expect(revision.modification.length).to.eq(1);
-			expect(revision.modification[0].position).to.eq(1);
-			expect(revision.modification[0].before).to.eq(contentBefore);
-			expect(revision.modification[0].after).to.eq(contentAfter);
+			expect(revision.modification.length).toBe(1);
+			expect(revision.modification[0].position).toBe(1);
+			expect(revision.modification[0].before).toBe(contentBefore);
+			expect(revision.modification[0].after).toBe(contentAfter);
 		});
 
 		it('# works when adding lines', () => {
@@ -218,12 +218,12 @@ describe('NotesService', () => {
 				contentAfter,
 			);
 
-			expect(revision.modification.length).to.eq(1);
+			expect(revision.modification.length).toBe(1);
 
-			expect(revision.modification[0].position).to.eq(2);
+			expect(revision.modification[0].position).toBe(2);
 
-			expect(revision.modification[0].before).to.eq(undefined);
-			expect(revision.modification[0].after).to.eq(contentAfter.split('\n')[1]);
+			expect(revision.modification[0].before).toBe(undefined);
+			expect(revision.modification[0].after).toBe(contentAfter.split('\n')[1]);
 		});
 
 		it('# works when modifying a line and adding another line', () => {
@@ -235,15 +235,15 @@ describe('NotesService', () => {
 				contentAfter,
 			);
 
-			expect(revision.modification.length).to.eq(2);
-			expect(revision.modification[0].position).to.eq(1);
-			expect(revision.modification[1].position).to.eq(2);
+			expect(revision.modification.length).toBe(2);
+			expect(revision.modification[0].position).toBe(1);
+			expect(revision.modification[1].position).toBe(2);
 
-			expect(revision.modification[0].before).to.eq(contentBefore);
-			expect(revision.modification[0].after).to.eq(contentAfter.split('\n')[0]);
+			expect(revision.modification[0].before).toBe(contentBefore);
+			expect(revision.modification[0].after).toBe(contentAfter.split('\n')[0]);
 
-			expect(revision.modification[1].before).to.eq(undefined);
-			expect(revision.modification[1].after).to.eq(contentAfter.split('\n')[1]);
+			expect(revision.modification[1].before).toBe(undefined);
+			expect(revision.modification[1].after).toBe(contentAfter.split('\n')[1]);
 		});
 
 		it('# works when adding a line between two other', () => {
@@ -255,15 +255,15 @@ describe('NotesService', () => {
 				contentAfter,
 			);
 
-			expect(revision.modification.length).to.eq(2);
-			expect(revision.modification[0].position).to.eq(2);
-			expect(revision.modification[1].position).to.eq(3);
+			expect(revision.modification.length).toBe(2);
+			expect(revision.modification[0].position).toBe(2);
+			expect(revision.modification[1].position).toBe(3);
 
-			expect(revision.modification[0].before).to.eq('Line 3');
-			expect(revision.modification[0].after).to.eq('Line 2');
+			expect(revision.modification[0].before).toBe('Line 3');
+			expect(revision.modification[0].after).toBe('Line 2');
 
-			expect(revision.modification[1].before).to.eq(undefined);
-			expect(revision.modification[1].after).to.eq('Line 3');
+			expect(revision.modification[1].before).toBe(undefined);
+			expect(revision.modification[1].after).toBe('Line 3');
 		});
 
 		it('# works when removing a line', () => {
@@ -275,19 +275,19 @@ describe('NotesService', () => {
 				contentAfter,
 			);
 
-			expect(revision.modification.length).to.eq(2);
-			expect(revision.modification[0].position).to.eq(1);
-			expect(revision.modification[1].position).to.eq(2);
+			expect(revision.modification.length).toBe(2);
+			expect(revision.modification[0].position).toBe(1);
+			expect(revision.modification[1].position).toBe(2);
 
-			expect(revision.modification[0].before).to.eq(
+			expect(revision.modification[0].before).toBe(
 				contentBefore.split('\n')[0],
 			);
-			expect(revision.modification[0].after).to.eq(contentAfter);
+			expect(revision.modification[0].after).toBe(contentAfter);
 
-			expect(revision.modification[1].before).to.eq(
+			expect(revision.modification[1].before).toBe(
 				contentBefore.split('\n')[1],
 			);
-			expect(revision.modification[1].after).to.eq(undefined);
+			expect(revision.modification[1].after).toBe(undefined);
 		});
 
 		it('# works when removing a line between two other', () => {
@@ -299,15 +299,15 @@ describe('NotesService', () => {
 				contentAfter,
 			);
 
-			expect(revision.modification.length).to.eq(2);
-			expect(revision.modification[0].position).to.eq(2);
-			expect(revision.modification[1].position).to.eq(3);
+			expect(revision.modification.length).toBe(2);
+			expect(revision.modification[0].position).toBe(2);
+			expect(revision.modification[1].position).toBe(3);
 
-			expect(revision.modification[0].before).to.eq('Line 2');
-			expect(revision.modification[0].after).to.eq('Line 3');
+			expect(revision.modification[0].before).toBe('Line 2');
+			expect(revision.modification[0].after).toBe('Line 3');
 
-			expect(revision.modification[1].before).to.eq('Line 3');
-			expect(revision.modification[1].after).to.eq(undefined);
+			expect(revision.modification[1].before).toBe('Line 3');
+			expect(revision.modification[1].after).toBe(undefined);
 		});
 	});
 });
