@@ -52,7 +52,7 @@ const AppPage: NextPage = () => {
 					className="col-span-2 flex flex-col align-items-center max-h-full"
 				>
 					<h2 className="text-xl"> Your notes</h2>
-					<div className="w-full px-3 flex flex-col align-items-center overflow-y-scroll">
+					<div className="w-full px-3 flex flex-col align-items-center h-full">
 						<AddNote />
 						<ul>
 							{notes.map((note) => (
