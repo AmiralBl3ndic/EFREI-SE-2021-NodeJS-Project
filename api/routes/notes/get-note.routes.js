@@ -167,4 +167,32 @@ router.delete(
 	},
 );
 
+// Retrieve note's revisions
+router.get('/users/:username/notes/:noteId', isAuthor, async (req, res) => {
+	const { data, error } = await supabase
+		.from('revisions')
+		.select('createdat, revision_id')
+		.eq('note', req.params.noteId);
+
+	if (error) throw new Error(error.message);
+
+	var modification_data = [];
+
+	for (id in data.revision_id) {
+		const { data: data2, error: error2 } = await supabase
+			.from('modifications')
+			.select('modification_id,position,previous,modified')
+			.eq('revision', id);
+		modification_data.push(data2[0]);
+	}
+
+	if (error2) throw new Error(error2.message);
+
+	return res.status(StatusCodes.OK).json({
+		username: req.params.username,
+		timestamp: data[0].createdat,
+		content: modification_data,
+	});
+});
+
 module.exports = router;
