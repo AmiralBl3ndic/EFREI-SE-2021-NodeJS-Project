@@ -1,0 +1,832 @@
+openapi: 3.0.0
+
+info:
+  title: Note versionner API
+  description: API for the Notes versionner application
+  version: 0.0.0
+
+servers:
+  - url: /api
+    description: Current environment
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    Unauthorized:
+      description: Access to route can only be granted through authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccessDeniedResource'
+      links:
+        Login:
+          operationId: login
+          description: Log into an account to access the resource
+
+    Forbidden:
+      description: Access is blocked because current user doesn't have the required privileges to access it
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccessDeniedResource'
+
+    SuccessfullLogin:
+      description: Login success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LoginSuccessData'
+      links:
+        GetUserData:
+          operationId: getUserData
+          parameters:
+            username: '$response.body#/username'
+          description: Get the user's data
+
+    UserNotFound:
+      description: User not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserNotFoundResponseData'
+
+    NoteNotFound:
+      description: Note not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NoteNotFoundResponseData'
+
+    UserOrNoteNotFound:
+      description: User or Note not found
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/UserNotFoundResponseData'
+              - $ref: '#/components/schemas/NoteNotFoundResponseData'
+
+    UserOrNoteOrRevisionNotFound:
+      description: User or Note or Revision not found
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/UserNotFoundResponseData'
+              - $ref: '#/components/schemas/NoteNotFoundResponseData'
+              - $ref: '#/components/schemas/RevisionNotFoundResponseData'
+
+  schemas:
+    UserRegistrationData:
+      description: Data required to create a user account
+      type: object
+      properties:
+        username:
+          description: Unique identifier of the user, will serve as a login credential
+          type: string
+          pattern: '^[a-zA-Z0-9-_]+$'
+          example: 'H4ckerman'
+        password:
+          description: Password for the user, will serve as the second half of the login credentials
+          type: string
+          example: 'Sup3rStrongP4SsW0rd'
+        email:
+          description: Email adress of the user
+          type: string
+          example: 'john.doe@mail.com'
+      required:
+        - username
+        - password
+        - email
+
+    LoginSuccessData:
+      description: Login success data with an authentication token
+      type: object
+      properties:
+        username:
+          description: Username of the logged-in user
+          type: string
+          example: 'H4ckerman'
+        token:
+          description: JWT Token to be used in the Authorization header with Bearer authentication type
+          type: string
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+
+    LoginFormData:
+      description: Login information
+      type: object
+      properties:
+        username:
+          description: Username of the user to log in
+          type: string
+          pattern: '^[a-zA-Z0-9-_]+$'
+          example: 'H4ckerman'
+        password:
+          description: Password of the user to log in
+          type: string
+      required:
+        - username
+        - password
+
+    AccessDeniedResource:
+      type: object
+      properties:
+        resource:
+          description: The resource access was attempted to
+          type: string
+
+    UserData:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Username of the user
+          example: 'H4ckerman'
+        email:
+          type: string
+          description: Email of the user
+          example: 'john.doe@mail.com'
+        uid:
+          type: string
+          description: Unique identifier of the user
+          example: 'PPBqWA9'
+
+    Note:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the note
+          example: 'cj7jQR'
+        author:
+          type: string
+          description: User who created and owns the note
+          example: 'H4ckerman'
+        revisions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Revision'
+        title:
+          type: string
+          description: Title of the note
+          example: "Explain Kubernetes like I'm five"
+        lastModified:
+          type: string
+          description: Last modification date for the note
+
+    NoteResume:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the note
+          example: '592g8hc'
+        link:
+          type: string
+          description: Link to the note
+          example: '/api/users/{username}/notes/592g8hc'
+        author:
+          type: string
+          description: Username of the user who created the note
+          example: 'H4ckerman'
+        title:
+          type: string
+          description: Title of the note
+          example: "Explain Kubernetes like I'm five"
+        lastModified:
+          type: string
+          description: Date of last modification of the note
+          example: '1605141362333'
+
+    Revision:
+      type: object
+      properties:
+        hash:
+          type: string
+          description: Unique identifier of the revision
+        timestamp:
+          type: string
+          description: Time of the revision (temporal marker)
+        username:
+          type: string
+          description: Name of the user issuing the revision
+          example: 'H4ckerman'
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Modification'
+        message:
+          type: string
+          description: Short description of what the revision is about
+
+    Modification:
+      type: object
+      properties:
+        position:
+          type: integer
+          description: position/line in the note
+          example: 4
+        before:
+          type: string
+          description: Previous state of the affected line
+          example: '*This was italic text before*'
+        after:
+          type: string
+          description: State of the affected line after the modification
+          example: '**This was italic text before, now it is bold text**'
+
+    NewNoteForm:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the note to create
+          example: "Explain Kubernetes like I'm five"
+      required:
+        - title
+
+    NewRevision:
+      type: object
+      properties:
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Modification'
+        message:
+          type: string
+          description: Short description of what the revision is about
+      required:
+        - changes
+
+    UserNotFoundResponseData:
+      type: object
+      properties:
+        username:
+          description: Username which no user can be found with
+          type: string
+          example: 'AgentSmith'
+        reason:
+          type: string
+          enum:
+            - 'User not found'
+
+    NoteNotFoundResponseData:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the note access was attempted to
+          example: 'h6gT68p'
+        reason:
+          type: string
+          enum:
+            - Note not found
+          example: 'Note not found'
+
+    RevisionNotFoundResponseData:
+      type: object
+      properties:
+        hash:
+          type: string
+          description: ID of the revision access was attempted to
+        reason:
+          type: string
+          enum:
+            - 'Revision not found'
+          example: 'Revision not found'
+
+  parameters:
+    pathUsername:
+      in: path
+      name: username
+      schema:
+        type: string
+        pattern: '^[a-zA-Z0-9-_]+$'
+      required: true
+
+    pathNoteId:
+      in: path
+      name: noteId
+      schema:
+        type: string
+      required: true
+
+    pathRevisionHash:
+      in: path
+      name: revisionHash
+      schema:
+        type: string
+      required: true
+
+paths:
+  ################################################################
+  # Documentation routes
+  ################################################################
+
+  /docs:
+    get:
+      description: Swagger UI of the API
+      tags:
+        - Documentation
+      responses:
+        200:
+          description: HTML page to render Swagger UI.
+
+  ################################################################
+  # Auth routes
+  ################################################################
+
+  /auth/register:
+    post:
+      description: Create a new user account
+      tags:
+        - Auth
+      requestBody:
+        description: Registration data
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationData'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationData'
+      responses:
+        201:
+          description: Account created
+          $ref: '#/components/responses/SuccessfullLogin'
+        400:
+          description: Bad request, missing parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reason:
+                    type: string
+                    enum:
+                      - Missing username parameter
+                      - Missing email parameter
+                      - Missing password parameter
+                      - Username must be set
+                      - Email must be set
+                      - Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit and a special character
+                      - Invalid email format
+                    description: Reason of request rejection
+        409:
+          description: Username or email already in use by another user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reason:
+                    description: The reason why the account creation is declined
+                    type: string
+                    enum:
+                      - 'Username already used by another user'
+                      - 'Email already used by another user'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    description: Short description of what went wrong server-side
+                    type: string
+                    enum:
+                      - 'Something went wrong'
+                      - 'Unable to create user'
+
+  /auth/login:
+    post:
+      description: Login to an existing account
+      operationId: login
+      tags:
+        - Auth
+      requestBody:
+        description: Login information
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginFormData'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginFormData'
+      responses:
+        200:
+          $ref: '#/components/responses/SuccessfullLogin'
+        401:
+          description: Wrong credentials combination
+        404:
+          $ref: '#/components/responses/UserNotFound'
+
+  ################################################################
+  # Search routes
+  ################################################################
+
+  /search/users:
+    get:
+      description: Search a user by username or email
+      operationId: searchUser
+      tags:
+        - Search
+        - Users
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+          required: true
+          description: Search criteria
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Search results
+          content:
+            application/json:
+              schema:
+                description: List of users matching search criteria
+                type: array
+                items:
+                  type: string
+                  description: Username of the found user
+
+  /search/notes:
+    get:
+      description: Search among notes the current authenticated user has access to
+      operationId: searchNotes
+      tags:
+        - Search
+        - Notes
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+          required: true
+          description: Search criteria
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Search results
+          content:
+            application/json:
+              schema:
+                description: List of notes current user has access to and matching search criteria
+                type: array
+                items:
+                  description: Condensed note object
+                  $ref: '#/components/schemas/NoteResume'
+
+  ################################################################
+  # Users routes
+  ################################################################
+
+  # User's data
+  /users/{username}:
+    get:
+      description: Get the data associated to a user
+      operationId: getUserData
+      tags:
+        - Users
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: User to read data of
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: User data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserData'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/UserNotFound'
+
+  # User's notes
+  /users/{username}/notes:
+    get:
+      description: Get the notes titles and IDs a user owns
+      operationId: getUserNotes
+      tags:
+        - Users
+        - Notes
+      parameters:
+        - $ref: '#/components/parameters/pathUsername'
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteResume'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+
+    post:
+      description: Create a note for a user
+      operationId: createUserNote
+      tags:
+        - Users
+        - Notes
+      parameters:
+        - $ref: '#/components/parameters/pathUsername'
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Note to be added
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewNoteForm'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewNoteForm'
+      responses:
+        201:
+          description: Note created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier of the note
+                    example: '592g8hc'
+                  link:
+                    type: string
+                    description: Link to the note
+                    example: '/api/users/{username}/notes/592g8hc'
+                  title:
+                    type: string
+                    description: Title of the note
+                    example: "Explain Kubernetes like I'm five"
+          links:
+            GetNewlyCreatedNote:
+              operationId: getUserNote
+              parameters:
+                username: '$request.path#/username'
+                noteId: '$response.body/#id'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/UserNotFound'
+
+  # Note data
+  /users/{username}/notes/{noteId}:
+    get:
+      description: Get note informations
+      operationId: getUserNote
+      tags:
+        - Users
+        - Notes
+      parameters:
+        - $ref: '#/components/parameters/pathUsername'
+        - $ref: '#/components/parameters/pathNoteId'
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Note exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  author:
+                    type: string
+                    description: User who owns the note
+                    example: 'H4ckerman'
+                  title:
+                    type: string
+                    description: The title of the note
+                    example: "Explain Kubernetes like I'm five"
+                  content:
+                    type: string
+                    description: Markdown representation of the current version of the note
+                    example: "# Headline 1\n\n## Headline 2\n\nContent of a paragraph"
+                  id:
+                    type: string
+                    description: ID of the note (should be idential to noteId from path)
+                    example: 'f9a805h'
+          links:
+            GetRevisions:
+              operationId: getUserNoteRevisions
+              parameters:
+                username: '$request.path.username'
+                noteId: '$request.path.noteId'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/UserOrNoteNotFound'
+
+    delete:
+      description: Delete a note
+      operationId: deleteUserNote
+      tags:
+        - Users
+        - Notes
+      parameters:
+        - $ref: '#/components/parameters/pathUsername'
+        - $ref: '#/components/parameters/pathNoteId'
+      security:
+        - bearerAuth: []
+      responses:
+        204:
+          description: Note deleted
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NoteNotFound'
+
+    patch:
+      description: Update the title of the note
+      operationId: updateUserNotTitle
+      tags:
+        - Users
+        - Notes
+      parameters:
+        - $ref: '#/components/parameters/pathUsername'
+        - $ref: '#/components/parameters/pathNoteId'
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: New title to set to the note
+              required:
+                - title
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: New title to set to the note
+              required:
+                - title
+      responses:
+        204:
+          description: Note title updated
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NoteNotFound'
+
+  # Note revisions
+  /users/{username}/notes/{noteId}/revisions:
+    get:
+      description: Get note revisions
+      operationId: getUserNoteRevisions
+      tags:
+        - Users
+        - Notes
+        - Revisions
+      parameters:
+        - $ref: '#/components/parameters/pathUsername'
+        - $ref: '#/components/parameters/pathNoteId'
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Note revisions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Revision'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/UserOrNoteNotFound'
+
+    post:
+      description: Add note revision
+      operationId: addUserNoteRevision
+      tags:
+        - Users
+        - Notes
+        - Revisions
+      parameters:
+        - $ref: '#/components/parameters/pathUsername'
+        - $ref: '#/components/parameters/pathNoteId'
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewRevision'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewRevision'
+      responses:
+        201:
+          description: Revision created and stored
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Revision'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/UserOrNoteNotFound'
+
+  # Single revision
+  /users/{username}/notes/{noteId}/revisions/{revisionHash}:
+    get:
+      description: Get a single revision
+      operationId: getUserNoteRevision
+      tags:
+        - Users
+        - Notes
+        - Revisions
+      parameters:
+        - $ref: '#/components/parameters/pathUsername'
+        - $ref: '#/components/parameters/pathNoteId'
+        - $ref: '#/components/parameters/pathRevisionHash'
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Revision details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Revision'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/UserOrNoteOrRevisionNotFound'
+
+    delete:
+      description: Delete a revision
+      operationId: deleteUserNoteRevision
+      tags:
+        - Users
+        - Notes
+        - Revisions
+      parameters:
+        - $ref: '#/components/parameters/pathUsername'
+        - $ref: '#/components/parameters/pathNoteId'
+        - $ref: '#/components/parameters/pathRevisionHash'
+        - in: query
+          name: revert
+          description: Whether to revert the revision if it is the last to impact some lines, defaults to false
+          schema:
+            type: boolean
+          required: false
+      security:
+        - bearerAuth: []
+      responses:
+        204:
+          description: Revision deleted
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/UserOrNoteOrRevisionNotFound'
