@@ -9,6 +9,7 @@ const usersRoutes = require('./users/get-users.routes');
 const searchRoutes = require('./search.routes');
 
 router.use('/auth', authRoutes);
+
 router.use(
 	'/search',
 	passport.authenticate('jwt', { session: false }),
