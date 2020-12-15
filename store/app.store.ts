@@ -12,6 +12,7 @@ const store = createStore<ApplicationStore>({
 	currentUser: null,
 	notes: [],
 	revisions: [],
+	noteContent: '',
 
 	// ======== Auth =========
 	setUser: action((state, userInfo) => {

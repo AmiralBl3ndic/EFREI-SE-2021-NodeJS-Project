@@ -6,15 +6,20 @@ export default interface ApplicationStore {
 	currentUser?: User;
 	notes: Note[];
 	revisions: Revision[];
-
+	noteContent: string;
 
 	// ======== Auth =========
 	setUser: Action<ApplicationStore, User>;
 
-	loginWithUsernameAndPassword: Thunk<ApplicationStore, {username:string, password:string}>;
+	loginWithUsernameAndPassword: Thunk<
+		ApplicationStore,
+		{ username: string; password: string }
+	>;
 
-	registerWithUEmailUsernameAndPassword: Thunk<ApplicationStore, {email:string, username:string, password:string}>;
-
+	registerWithUEmailUsernameAndPassword: Thunk<
+		ApplicationStore,
+		{ email: string; username: string; password: string }
+	>;
 
 	// ======== Notes ==========
 	addNote: Action<ApplicationStore, Note>;
@@ -24,7 +29,6 @@ export default interface ApplicationStore {
 	resetNotes: Action<ApplicationStore>;
 
 	getAllNoteOfUser: Thunk<ApplicationStore>;
-
 
 	// ======== Note/Revision =======
 	addRevision: Action<ApplicationStore, Revision>;
