@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import AddNote from './AddNote';
 import DocumentCard from './DocumentCard';
 
 interface documentProps {
@@ -39,6 +40,7 @@ const DisplayDocumentCards: React.FC = () => {
 			className="row d-flex flex-column align-items-center"
 			onClick={clickable}
 		>
+			<AddNote />
 			{documents.map((doc, index) => {
 				return (
 					<DocumentCard key={index + 1} id={index + 1} title={doc.title} />
