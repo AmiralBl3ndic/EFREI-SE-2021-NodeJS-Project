@@ -1,8 +1,8 @@
-import axios from 'axios';
 import { useStoreActions } from 'easy-peasy';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import ApplicationStore from 'store/appstore.model';
+import Image from 'next/image';
 
 const LoginForm = () => {
 	const { register, handleSubmit } = useForm();
@@ -25,11 +25,9 @@ const LoginForm = () => {
 		<div className="flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
 			<div className="max-w-md w-full space-y-8">
 				<div>
-					<img
-						className="mx-auto h-20 w-auto"
-						src="http://placedelacomedie.com/wp-content/uploads/2017/07/Ricard_logo.png"
-						alt="Workflow"
-					/>
+					<div className="text-center">
+						<Image src="/logo.png" alt="logo" width={180} height={90} />
+					</div>
 					<h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
 						Sign in to your account
 					</h2>
