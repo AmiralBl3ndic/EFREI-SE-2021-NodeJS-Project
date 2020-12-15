@@ -144,4 +144,27 @@ router.post(
 	},
 );
 
+// Delete a note's specific revision
+router.delete(
+	'/users/:username/notes/:noteId/revisions/:revisionId',
+	isAuthor,
+	async (req, res) => {
+		const { error } = await supabase
+			.from('modifications')
+			.delete()
+			.match({ revision: req.params.revisionId });
+
+		if (error) throw error;
+
+		const { error: error2 } = await supabase
+			.from('revisions')
+			.delete()
+			.match({ revision_id: req.params.revisionId });
+
+		if (error2) throw error2;
+
+		return res.status(StatusCodes.NO_CONTENT).send();
+	},
+);
+
 module.exports = router;
