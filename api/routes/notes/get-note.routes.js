@@ -69,16 +69,17 @@ router.patch('/users/:username/notes/:noteId', isAuthor, async (req, res) => {
 // Delete a note
 router.delete('/users/:username/notes/:noteId', isAuthor, async (req, res) => {
 	const { data, error } = await supabase
+		.from('notes_access_control')
+		.delete()
+		.match({ note_id: req.params.noteId });
+
+	const { data: data2, error: error2 } = await supabase
 		.from('notes')
 		.delete()
 		.match({ note_id: req.params.noteId });
 
-	await supabase
-		.from('notes_access_controle')
-		.delete()
-		.match({ note_id: req.params.noteId });
-
 	if (error) throw error;
+	if (error2) throw error2;
 
 	return res.status(StatusCodes.OK).json(data[0]);
 });
@@ -110,9 +111,7 @@ router.post(
 		// Create the revision in supabase
 		const { data, error } = await supabase.from('revisions').insert([
 			{
-				//TODO: @Theo To change after @Camille has change DB for createdat
-				// It is to test the creation
-				createdat: '2020-12-15T00:27:19+01:00',
+				createdat: new Date(revision.timestamp).toISOString(),
 				note: req.params.noteId,
 			},
 		]);
@@ -120,29 +119,27 @@ router.post(
 		// Check if the revision has been added
 		if (error) throw error;
 
+		const revisionId = data[0].revision_id;
 		// Create modifications of the revision in supabase
-		for (let i = 0; i < revision.modification.length; i++) {
-			const { data: data2, error: error2 } = await supabase
-				.from('modifications')
-				.insert([
-					{
-						position: revision.modification[i].position,
-						previous: revision.modification[i].before,
-						modified: revision.modification[i].after,
-						revision: data[0].revision_id,
-					},
-				]);
+		const toInsert = revision.modification.map((m) => ({
+			position: m.position,
+			previous: m.before,
+			modified: m.after,
+			revision: revisionId,
+		}));
 
-			// Check if the modification.s has/have been added
-			if (error2) throw error;
-		}
+		const { data: data2, error: error2 } = await supabase
+			.from('modifications')
+			.insert(toInsert);
+
+		// Check if the modification.s has/have been added
+		if (error2) throw error;
 
 		return res.status(StatusCodes.CREATED).json({
-			hash: data[0].revision_id,
+			hash: revisionId,
 			timestap: data[0].createdat,
 			username: req.params.username,
 			contentAfter: contentAfter,
-			message: req.body.message,
 		});
 	},
 );
