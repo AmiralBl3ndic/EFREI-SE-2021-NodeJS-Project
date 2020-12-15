@@ -5,7 +5,9 @@ import { useStoreActions } from 'easy-peasy';
 import ApplicationStore from 'store/appstore.model';
 
 const AddNote: React.FC = () => {
+	const [title, setTitle] = React.useState('');
 	const [show, setShow] = React.useState(false);
+
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 
@@ -14,7 +16,11 @@ const AddNote: React.FC = () => {
 	);
 
 	const AddNoteAction = () => {
-		sendAddNote('sss');
+		const obj = {
+			title: title,
+		};
+
+		sendAddNote(obj);
 		handleClose();
 	};
 
@@ -26,7 +32,7 @@ const AddNote: React.FC = () => {
 		<>
 			<button
 				type="button"
-				className="btn btn-outline-success btn-lg"
+				className="btn btn-outline-success btn-lg btn-block"
 				onClick={handleShow}
 			>
 				Create new note
@@ -42,7 +48,11 @@ const AddNote: React.FC = () => {
 							<h5>Title</h5>
 						</div>
 						<div className="col-md-10">
-							<input placeholder="please write your title" className="w-full" />
+							<input
+								placeholder="please write your title"
+								className="w-full"
+								onChange={(event) => setTitle(event.target.value)}
+							/>
 						</div>
 					</div>
 				</Modal.Body>
