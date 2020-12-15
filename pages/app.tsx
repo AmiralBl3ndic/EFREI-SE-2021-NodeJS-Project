@@ -30,40 +30,46 @@ const AppPage: NextPage = () => {
 			<div className="h-screen lg:max-h-screen grid gap-0 grid-cols-12 grid-rows-1">
 				<aside
 					role="navigation"
-					className="col-span-2 flex flex-col align-items-center px-3 max-h-full overflow-y-scroll"
+					className="col-span-2 flex flex-col align-items-center max-h-full"
 				>
 					<h2 className="text-xl">Notes</h2>
-					{new Array(100).fill(undefined).map((_, idx) => (
-						<DocumentCard key={idx} id={idx} title={`${idx + 1}`} />
-					))}
+					<div className="w-full px-3 flex flex-col align-items-center overflow-y-scroll">
+						{new Array(100).fill(undefined).map((_, idx) => (
+							<DocumentCard key={idx} id={idx} title={`${idx + 1}`} />
+						))}
+					</div>
 				</aside>
 
-				<main role="main" className="col-span-9 bg-light py-2 px-6">
+				<main role="main" className="col-span-9 bg-white py-2 px-6">
 					<div>
 						<Editor
 							template={false}
 							defaultValue=""
-							onChange={setNoteContent}
-							className="h-screen"
-							onSave={() => alert('SAVED')}
+							onChange={(v) => {
+								setNoteContent(v);
+								console.log(v());
+							}}
+							className="px-5 min-h-1/2"
 						/>
 					</div>
 				</main>
 
 				<aside
 					role="list"
-					className="col-span-1 flex flex-col align-items-center px-3 max-h-full overflow-y-scroll"
+					className="col-span-1 flex flex-col align-items-center max-h-full"
 				>
 					<h2 className="text-lg">Revisions</h2>
 
-					{new Array(100).fill(undefined).map((_, idx) => (
-						<div
-							key={idx}
-							className="w-full bg-light rounded-lg mb-2 cursor-pointer"
-						>
-							#{idx + 1}
-						</div>
-					))}
+					<div className="w-full px-3 flex flex-col align-items-center overflow-y-scroll">
+						{new Array(100).fill(undefined).map((_, idx) => (
+							<div
+								key={idx}
+								className="w-full bg-light rounded-lg mb-2 cursor-pointer"
+							>
+								#{idx + 1}
+							</div>
+						))}
+					</div>
 				</aside>
 			</div>
 		</>
