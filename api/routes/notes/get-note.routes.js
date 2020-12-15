@@ -170,15 +170,15 @@ router.delete(
 // Retrieve a note's specific revision
 router.get(
 	'/users/:username/notes/:noteId/revisions/:revisionId',
-  	isAuthor,
+	isAuthor,
 	async (req, res) => {
 		const { data, error } = await supabase
 			.from('revisions')
-    .select('createdat', 'revision_id')
+			.select('createdat', 'revision_id')
 			.eq('revision_id', req.params.revisionId)
 			.limit(1);
-    
-    if (error) throw error;
+
+		if (error) throw error;
 
 		return res.status(StatusCodes.OK).json(
 			data.map((r) => ({
@@ -189,7 +189,7 @@ router.get(
 		);
 	},
 );
-  
+
 // Retrieve note's revisions
 router.get(
 	'/users/:username/notes/:noteId/revisions',
@@ -203,11 +203,21 @@ router.get(
 
 		if (error) throw error;
 
+		const { data: data2, error: error2 } = await supabase
+			.from('modifications')
+			.select('position, modification_id', 'previous', 'modified', 'revision')
+			.eq('revision', data.revision_id);
+
+		if (error2) throw error2;
+
 		return res.status(StatusCodes.OK).json(
-			data.map((r) => ({
+			data2.map((r) => ({
 				username: req.params.username,
-				hash: r.revision_id,
-				timestamp: r.createdAt,
+				position: r.position,
+				modificationId: r.modification_id,
+				modification: r.modified,
+				previous: r.previous,
+				revisionId: r.revision,
 			})),
 		);
 	},
