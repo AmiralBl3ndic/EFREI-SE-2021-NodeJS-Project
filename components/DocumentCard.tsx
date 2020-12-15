@@ -29,7 +29,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({ note }) => {
 	};
 
 	return (
-		<div className="bg-light w-full rounded-2xl my-2 cursor-pointer">
+		<div className="bg-light rounded-2xl my-2 cursor-pointer w-full">
 			<div className="card-content">
 				<div className="card-body">
 					<div className="media d-flex">
@@ -37,7 +37,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({ note }) => {
 							<i className="gg-file-document"></i>
 						</div>
 						<div className="media-body text-right">
-							<h3>{checkTitleSize(note.title)}</h3>
+							<h3 className=" truncate">{checkTitleSize(note.title)}</h3>
 							<span>{checkIDSize(note.id)}</span>
 						</div>
 					</div>

@@ -51,7 +51,7 @@ const AppPage: NextPage = () => {
 					role="navigation"
 					className="col-span-2 flex flex-col align-items-center max-h-full"
 				>
-					<h2 className="text-xl">Notes</h2>
+					<h2 className="text-xl"> Your notes</h2>
 					<div className="w-full px-3 flex flex-col align-items-center overflow-y-scroll">
 						<AddNote />
 						<ul>
@@ -70,13 +70,6 @@ const AppPage: NextPage = () => {
 							<header className="flex justify-between mt-3 mb-5">
 								{/* TODO: make this editable */}
 								<h1>{currentNote?.title || ''}</h1>
-
-								<button
-									className="btn btn-lg btn-primary"
-									onClick={() => createRevisionForCurrentNote()}
-								>
-									Create new revision
-								</button>
 							</header>
 
 							<NoteEditor
@@ -103,13 +96,15 @@ const AppPage: NextPage = () => {
 
 					<div className="w-full px-3 flex flex-col align-items-center overflow-y-scroll">
 						{/* TODO: make this button add a revision */}
-
-						<div className="my-3">
-							<button className="btn btn-outline-danger btn-lg btn-block">
-								add new revision
+						<div className="my-1">
+							<button
+								className="btn btn-outline-primary btn-lg btn-block"
+								onClick={() => createRevisionForCurrentNote()}
+							>
+								create new revision
 							</button>
 						</div>
-						<ul className="w-full">
+						<ul className="w-full my-2">
 							{new Array(100).fill(undefined).map((_, idx) => (
 								<li
 									key={idx}
