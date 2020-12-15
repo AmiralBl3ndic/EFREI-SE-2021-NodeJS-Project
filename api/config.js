@@ -24,7 +24,6 @@ const requiredEnvVariables = [
 	'SENTRY_DSN',
 	'MEILISEARCH_HOST',
 	'MEILISEARCH_MASTER_KEY',
-	'NEXT_PUBLIC_BASE_URL',
 ];
 
 // Check that each required variable is set with a value that is not null nor undefined
