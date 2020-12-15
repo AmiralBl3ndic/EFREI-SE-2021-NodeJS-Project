@@ -7,6 +7,7 @@ export default interface ApplicationStore {
 	notes: Note[];
 	revisions: Revision[];
 	noteContent: string;
+	currentNote: Note;
 
 	// ======== Auth =========
 	setUser: Action<ApplicationStore, User>;
@@ -36,4 +37,11 @@ export default interface ApplicationStore {
 	addMultipleRevision: Action<ApplicationStore, Revision[]>;
 
 	getRevisionForNote: Thunk<ApplicationStore, string>;
+
+	setCurrentNote: Action<ApplicationStore, Note>;
+
+	////////////////////////////////////////////////////////////
+	// Editor
+	////////////////////////////////////////////////////////////
+	setNoteContent: Action<ApplicationStore, string>;
 }

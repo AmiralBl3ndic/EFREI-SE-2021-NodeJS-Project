@@ -7,12 +7,22 @@ const $axios = axios.create({
 	baseURL: '/api', // TODO: change to a Environmental variable
 });
 
+const testNote: Note = {
+	id: 'f89d47ef-f3c2-48e6-b265-dae5a6af17c9',
+	title: 'QDROGMINSEDTGBNUOIMETSDBMIONU',
+	content: '# Hello this is a test content',
+	author: 'camille',
+	link: '/api/users/camille/notes/f89d47ef-f3c2-48e6-b265-dae5a6af17c9',
+	lastModified: new Date().toISOString(),
+};
+
 const store = createStore<ApplicationStore>({
 	// ======== State ========
 	currentUser: null,
-	notes: [],
+	notes: [testNote],
 	revisions: [],
 	noteContent: '',
+	currentNote: testNote,
 
 	// ======== Auth =========
 	setUser: action((state, userInfo) => {
@@ -27,6 +37,7 @@ const store = createStore<ApplicationStore>({
 			})
 			.then((res) => {
 				actions.setUser(res.data);
+				actions.getAllNoteOfUser();
 			})
 			.catch((err) => {
 				console.error(err); // TODO: check error type and show message accordingly
@@ -68,7 +79,13 @@ const store = createStore<ApplicationStore>({
 			.then((res) => {
 				actions.addMultipleNotes(res.data);
 			})
-			.catch((err) => console.error(err));
+			.catch((err) => {
+				console.error(err);
+			});
+	}),
+
+	setCurrentNote: action((state, payload) => {
+		state.currentNote = payload;
 	}),
 
 	// ======== Note/Revision =======
@@ -92,6 +109,13 @@ const store = createStore<ApplicationStore>({
 				actions.addMultipleRevision(res.data);
 			})
 			.catch((err) => console.error(err));
+	}),
+
+	////////////////////////////////////////////////////////////
+	// Editor
+	////////////////////////////////////////////////////////////
+	setNoteContent: action((state, payload) => {
+		state.noteContent = payload;
 	}),
 });
 
