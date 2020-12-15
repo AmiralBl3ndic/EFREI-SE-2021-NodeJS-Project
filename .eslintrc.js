@@ -7,7 +7,7 @@ module.exports = {
 		jest: true,
 	},
 	parserOptions: {
-		parser: 'babel-eslint',
+		parser: '@typescript-eslint/parser',
 		ecmaVersion: 2020,
 		sourceType: 'module',
 	},
