@@ -3,6 +3,7 @@ const express = require('express');
 const session = require('express-session');
 const Sentry = require('@sentry/node');
 const Tracing = require('@sentry/tracing');
+const cors = require('cors');
 const app = express();
 
 // Config
@@ -29,6 +30,8 @@ Sentry.init({
 
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
+
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
