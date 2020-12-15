@@ -23,6 +23,10 @@ const AppPage: NextPage = () => {
 		(actions) => actions.setCurrentNote,
 	);
 
+	const createRevisionForCurrentNote = useStoreActions<ApplicationStore>(
+		(actions) => actions.createRevision,
+	);
+
 	const notes = useStoreState<ApplicationStore>((state) => state.notes);
 
 	const router = useRouter();
@@ -60,12 +64,19 @@ const AppPage: NextPage = () => {
 					</div>
 				</aside>
 
-				<div role="main" className="col-span-8 bg-white py-2 px-6">
+				<div role="main" className="col-span-9 bg-white py-2 px-6">
 					{currentNote ? (
 						<>
 							<header className="flex justify-between mt-3 mb-5">
 								{/* TODO: make this editable */}
 								<h1>{currentNote?.title || ''}</h1>
+
+								<button
+									className="btn btn-lg btn-primary"
+									onClick={() => createRevisionForCurrentNote()}
+								>
+									Create new revision
+								</button>
 							</header>
 
 							<NoteEditor

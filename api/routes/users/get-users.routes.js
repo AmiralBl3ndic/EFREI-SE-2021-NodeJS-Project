@@ -45,18 +45,18 @@ router.post('/:username/notes', canCreateNote, async (req, res) => {
 			title: req.body.title,
 		},
 	]);
-	const { data: data2, error: error2 } = await supabase
-		.from('notes_access_control')
-		.insert([
-			{
-				user_id: req.user.user_id,
-				note: data[0].note_id,
-				can_read: true,
-				can_write: true,
-			},
-		]);
 
 	if (error) throw error;
+
+	const { error: error2 } = await supabase.from('notes_access_control').insert([
+		{
+			user_id: req.user.user_id,
+			note: data[0].note_id,
+			can_read: true,
+			can_write: true,
+		},
+	]);
+
 	if (error2) throw error2;
 
 	return res.status(StatusCodes.CREATED).json({
@@ -147,9 +147,16 @@ router.post(
 		// Check if the modification.s has/have been added
 		if (error2) throw error;
 
+		const { error: error3 } = await supabase
+			.from('notes')
+			.update({ current_content: contentAfter })
+			.eq('note_id', req.params.noteId);
+
+		if (error3) throw error3;
+
 		return res.status(StatusCodes.CREATED).json({
 			hash: revisionId,
-			timestap: data[0].createdat,
+			timestamp: data[0].createdat,
 			username: req.params.username,
 			contentAfter: contentAfter,
 		});
