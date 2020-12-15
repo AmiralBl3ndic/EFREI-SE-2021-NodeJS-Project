@@ -8,6 +8,7 @@ import DocumentCard from '../components/DocumentCard';
 import Editor from 'rich-markdown-editor';
 import { Note } from '../store/frontend.types';
 import NoteEditor from '../components/NoteEditor';
+import AddNote from 'components/AddNote';
 
 const AppPage: NextPage = () => {
 	const setNoteContent = useStoreActions<ApplicationStore>(
@@ -49,6 +50,7 @@ const AppPage: NextPage = () => {
 					<h2 className="text-xl">Notes</h2>
 					<div className="w-full px-3 flex flex-col align-items-center overflow-y-scroll">
 						<ul>
+							<AddNote />
 							{notes.map((note) => (
 								<li key={note.id} onClick={() => setCurrentNote(note)}>
 									<DocumentCard note={note} key={note.id} />

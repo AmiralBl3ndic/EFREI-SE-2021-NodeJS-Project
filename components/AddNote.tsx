@@ -10,10 +10,11 @@ const AddNote: React.FC = () => {
 	const handleShow = () => setShow(true);
 
 	const sendAddNote = useStoreActions<ApplicationStore>(
-		(actions) => actions.addNote,
+		(actions) => actions.uploadNewNote,
 	);
 
 	const AddNoteAction = () => {
+		sendAddNote('sss');
 		handleClose();
 	};
 
@@ -25,7 +26,7 @@ const AddNote: React.FC = () => {
 		<>
 			<button
 				type="button"
-				className="btn btn-outline-light btn-lg"
+				className="btn btn-outline-success btn-lg"
 				onClick={handleShow}
 			>
 				Create new note
@@ -39,7 +40,6 @@ const AddNote: React.FC = () => {
 					<div className="row">
 						<div className="col-md-2">
 							<h5>Title</h5>
-							<span></span>
 						</div>
 						<div className="col-md-10">
 							<input placeholder="please write your title" className="w-full" />
