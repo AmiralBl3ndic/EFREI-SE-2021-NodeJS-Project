@@ -2,6 +2,7 @@ import { createStore, action, thunk } from 'easy-peasy';
 import axios from 'axios';
 import { Note, Revision, User } from './frontend.types';
 import ApplicationStore from './appstore.model';
+import { toast } from 'react-toastify';
 
 const $axios = axios.create({
 	baseURL: '/api', // TODO: change to a Environmental variable
@@ -27,6 +28,9 @@ const store = createStore<ApplicationStore>({
 				password,
 			})
 			.then((res) => {
+				toast(`Welcome ${res.data.username}!`, {
+					position: 'top-center',
+				});
 				actions.setUser(res.data);
 				actions.getAllNoteOfUser();
 			})
@@ -40,6 +44,9 @@ const store = createStore<ApplicationStore>({
 			.post<User>('/auth/register', registerData)
 			.then((res) => {
 				actions.setUser(res.data);
+				toast('Account created!', {
+					position: 'top-center',
+				});
 			})
 			.catch((err) => {
 				console.error(err); // TODO: check error type and show message accordingly
@@ -134,6 +141,10 @@ const store = createStore<ApplicationStore>({
 
 					actions.addNote(newNote);
 					actions.setCurrentNote(newNote);
+
+					toast('Note created!', {
+						position: 'top-center',
+					});
 				})
 				.catch((err) => {
 					console.error(err);
@@ -171,6 +182,10 @@ const store = createStore<ApplicationStore>({
 							note.id === updatedNote.id ? updatedNote : note,
 						),
 					);
+
+					toast('Revision created!', {
+						position: 'top-center',
+					});
 				})
 				.catch((err) => {
 					console.error(err);
@@ -202,6 +217,13 @@ const store = createStore<ApplicationStore>({
 					actions.setNotes(
 						notes.map((n) => (n.id === updatedNote.id ? updatedNote : n)),
 					);
+
+					toast('Title updated!', {
+						position: 'top-center',
+					});
+				})
+				.catch((err) => {
+					console.error(err);
 				});
 		}
 	}),

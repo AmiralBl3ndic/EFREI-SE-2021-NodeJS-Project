@@ -7,8 +7,11 @@ import { Windmill } from '@windmill/react-ui';
 import { StoreProvider } from 'easy-peasy';
 import Head from 'next/head';
 import store from 'store/app.store';
+import { ToastContainer } from 'react-toastify';
 
-function MyApp({ Component, pageProps }: AppProps) {
+import 'react-toastify/dist/ReactToastify.min.css';
+
+const MyApp = ({ Component, pageProps }: AppProps) => {
 	return (
 		<>
 			<Head>
@@ -21,8 +24,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 					<Component {...pageProps} />
 				</StoreProvider>
 			</Windmill>
+
+			<ToastContainer autoClose={4000} />
 		</>
 	);
-}
+};
 
 export default MyApp;
