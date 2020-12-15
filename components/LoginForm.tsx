@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import ApplicationStore from 'store/appstore.model';
 import Image from 'next/image';
 
-const LoginForm = () => {
+const LoginForm: React.FC = () => {
 	const { register, handleSubmit } = useForm();
 
 	const sendLoging = useStoreActions<ApplicationStore>(

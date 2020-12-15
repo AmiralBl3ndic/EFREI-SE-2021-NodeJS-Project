@@ -1,4 +1,4 @@
-import type { AppProps /*, AppContext */ } from 'next/app';
+import type { AppProps } from 'next/app';
 import '../style/home.css';
 import 'tailwindcss/tailwind.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -6,12 +6,6 @@ import React from 'react';
 import { Windmill } from '@windmill/react-ui';
 import { StoreProvider } from 'easy-peasy';
 import Head from 'next/head';
-
-import 'tailwindcss/tailwind.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-import type { AppProps } from 'next/app';
-
 import store from 'store/app.store';
 
 function MyApp({ Component, pageProps }: AppProps) {
