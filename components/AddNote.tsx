@@ -14,7 +14,10 @@ const AddNote: React.FC = () => {
 	);
 
 	const AddNoteAction = () => {
-		sendAddNote('sss');
+		const obj = {
+			title: 'sss',
+		};
+		sendAddNote(obj);
 		handleClose();
 	};
 

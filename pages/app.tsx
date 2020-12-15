@@ -60,17 +60,12 @@ const AppPage: NextPage = () => {
 					</div>
 				</aside>
 
-				<div role="main" className="col-span-9 bg-white py-2 px-6">
+				<div role="main" className="col-span-8 bg-white py-2 px-6">
 					{currentNote ? (
 						<>
 							<header className="flex justify-between mt-3 mb-5">
 								{/* TODO: make this editable */}
 								<h1>{currentNote?.title || ''}</h1>
-
-								{/* TODO: make this button add a revision */}
-								<button className="btn btn-lg btn-primary">
-									Create new revision
-								</button>
 							</header>
 
 							<NoteEditor
@@ -91,11 +86,18 @@ const AppPage: NextPage = () => {
 
 				<aside
 					role="complementary"
-					className="col-span-1 flex flex-col align-items-center max-h-full"
+					className="col-span-2 flex flex-col align-items-center max-h-full"
 				>
 					<h2 className="text-lg">Revisions</h2>
 
 					<div className="w-full px-3 flex flex-col align-items-center overflow-y-scroll">
+						{/* TODO: make this button add a revision */}
+
+						<div className="my-3">
+							<button className="btn btn-outline-danger btn-lg btn-block">
+								add new revision
+							</button>
+						</div>
 						<ul className="w-full">
 							{new Array(100).fill(undefined).map((_, idx) => (
 								<li
