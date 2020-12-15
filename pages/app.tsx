@@ -64,7 +64,7 @@ const AppPage: NextPage = () => {
 					</div>
 				</aside>
 
-				<div role="main" className="col-span-9 bg-white py-2 px-6">
+				<div role="main" className="col-span-8 bg-white py-2 px-6">
 					{currentNote ? (
 						<>
 							<header className="flex justify-between mt-3 mb-5">
