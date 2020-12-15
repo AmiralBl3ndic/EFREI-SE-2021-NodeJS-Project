@@ -1,10 +1,53 @@
+import Modal from 'react-bootstrap/Modal';
 import React from 'react';
 
 const AddNote: React.FC = () => {
+	const [show, setShow] = React.useState(false);
+
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
+
 	return (
-		<button type="button" className="btn btn-outline-light btn-lg">
-			Create new note
-		</button>
+		<>
+			<button
+				type="button"
+				className="btn btn-outline-light btn-lg"
+				onClick={handleShow}
+			>
+				Create new note
+			</button>
+
+			<Modal show={show} onHide={handleClose}>
+				<Modal.Header closeButton>
+					<Modal.Title>Add a new note</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<div className="row">
+						<div className="col-md-2">
+							<h5>Title</h5>
+							<span></span>
+						</div>
+						<div className="col-md-10">
+							<input placeholder="please write your title" className="w-full" />
+						</div>
+					</div>
+				</Modal.Body>
+				<Modal.Footer>
+					<button
+						className="btn btn-outline-danger btn-sm"
+						onClick={handleClose}
+					>
+						cancel
+					</button>
+					<button
+						className="btn btn-outline-success btn-sm"
+						onClick={handleClose}
+					>
+						add note
+					</button>
+				</Modal.Footer>
+			</Modal>
+		</>
 	);
 };
 
