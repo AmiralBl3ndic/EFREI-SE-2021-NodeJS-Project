@@ -174,7 +174,7 @@ router.get('/users/:username/notes/:noteId', isAuthor, async (req, res) => {
 		.select('createdat, revision_id')
 		.eq('note', req.params.noteId);
 
-	if (error) throw new Error(error.message);
+	if (error) throw error;
 
 	var modification_data = [];
 
@@ -186,7 +186,7 @@ router.get('/users/:username/notes/:noteId', isAuthor, async (req, res) => {
 		modification_data.push(data2[0]);
 	}
 
-	if (error2) throw new Error(error2.message);
+	if (error2) throw error2;
 
 	return res.status(StatusCodes.OK).json({
 		username: req.params.username,
