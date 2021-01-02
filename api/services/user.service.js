@@ -58,7 +58,7 @@ class UserService {
 			.select('*')
 			.or(`email.eq.${emailToCheck},username.eq.${usernameToCheck}`);
 
-		if (error) throw new Error(error);
+		if (error) throw error;
 
 		return records.length > 0;
 	}
