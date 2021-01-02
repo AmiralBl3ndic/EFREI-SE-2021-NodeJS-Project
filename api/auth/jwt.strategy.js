@@ -1,9 +1,10 @@
-const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
+const { Strategy: JwtStrategy } = require('passport-jwt');
 const UserService = require('../services/user.service');
 
 module.exports = new JwtStrategy(
 	{
-		jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+		jwtFromRequest: (req) =>
+			req.cookies && req.cookies['jwt_token'] ? req.cookies['jwt_token'] : null,
 		secretOrKey: process.env.JWT_SECRET,
 	},
 	async ({ sub }, done) => {
