@@ -14,9 +14,10 @@ router.use(
 
 		const token = AuthService.issueJwt(req.user.username);
 
+		res.cookie('jwt_token', token, { httpOnly: true });
+
 		return res.status(StatusCodes.OK).json({
 			username: req.user.username,
-			token,
 		});
 	},
 );
