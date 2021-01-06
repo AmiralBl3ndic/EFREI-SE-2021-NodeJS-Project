@@ -96,7 +96,7 @@ router.post('/', validateRequest, async (req, res) => {
 			token: AuthService.issueJwt(req.body.username),
 		});
 	} catch (error) {
-		throw new Error(error);
+		throw error;
 	}
 });
 

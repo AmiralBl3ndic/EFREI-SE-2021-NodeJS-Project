@@ -1,6 +1,6 @@
 {
 	"name": "ad-versionem",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"main": "api/index.js",
 	"private": true,
 	"scripts": {
@@ -21,6 +21,7 @@
 		"argon2": "^0.27.0",
 		"axios": "^0.21.1",
 		"bootstrap": "^4.5.3",
+		"cookie-parser": "^1.4.5",
 		"cors": "^2.8.5",
 		"dotenv": "^8.2.0",
 		"easy-peasy": "^4.0.1",

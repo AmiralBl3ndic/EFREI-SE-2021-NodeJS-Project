@@ -2,6 +2,8 @@ const supabase = require('../db');
 
 const AuthService = require('./auth.service');
 
+const supabaseFilterForbiddenCharsRegex = /(\.(not\.)?(eq|like|gt|lt|neq|gte|lte|ilike|in)\.)|,/;
+
 class UserService {
 	static async _findAllByField(field, value) {
 		const { data: userRecords, error } = await supabase
@@ -53,12 +55,20 @@ class UserService {
 		const emailToCheck = email.trim().toLowerCase();
 		const usernameToCheck = username.trim().toLowerCase();
 
+		if (
+			[emailToCheck, usernameToCheck].some((_) =>
+				supabaseFilterForbiddenCharsRegex.test(_),
+			)
+		) {
+			throw new Error('Invalid email or username');
+		}
+
 		const { data: records, error } = await supabase
 			.from('users')
 			.select('*')
 			.or(`email.eq.${emailToCheck},username.eq.${usernameToCheck}`);
 
-		if (error) throw new Error(error);
+		if (error) throw error;
 
 		return records.length > 0;
 	}
