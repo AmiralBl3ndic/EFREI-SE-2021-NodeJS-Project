@@ -19,7 +19,7 @@
 		"@supabase/supabase-js": "^1.0.3",
 		"@windmill/react-ui": "^0.4.1",
 		"argon2": "^0.27.0",
-		"axios": "^0.21.0",
+		"axios": "^0.21.1",
 		"bootstrap": "^4.5.3",
 		"cors": "^2.8.5",
 		"dotenv": "^8.2.0",
