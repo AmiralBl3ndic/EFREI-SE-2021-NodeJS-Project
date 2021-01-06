@@ -56,8 +56,8 @@ class UserService {
 		const usernameToCheck = username.trim().toLowerCase();
 
 		if (
-			[emailToCheck, usernameToCheck].some(
-				supabaseFilterForbiddenCharsRegex.test,
+			[emailToCheck, usernameToCheck].some((_) =>
+				supabaseFilterForbiddenCharsRegex.test(_),
 			)
 		) {
 			throw new Error('Invalid email or username');
