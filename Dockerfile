@@ -1,6 +1,6 @@
 FROM node:alpine
 
-LABEL version="0.1"
+LABEL version="1.1.0"
 LABEL description="A notes taking app with built-in versionning"
 
 WORKDIR /app
