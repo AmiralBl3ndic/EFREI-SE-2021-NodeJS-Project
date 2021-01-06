@@ -4,6 +4,7 @@ const session = require('express-session');
 const Sentry = require('@sentry/node');
 const Tracing = require('@sentry/tracing');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const app = express();
 
 // Config
@@ -35,6 +36,7 @@ app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(
 	session({
 		secret: sessionSecret,
