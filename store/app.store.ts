@@ -70,9 +70,7 @@ const store = createStore<ApplicationStore>({
 		if (getState().currentUser === null) throw new Error('User not logged in');
 		$axios
 			.get<Note[]>(`/users/${getState().currentUser.username}/notes`, {
-				headers: {
-					Authorization: `Bearer ${getState().currentUser.token}`,
-				},
+				withCredentials: true,
 			})
 			.then((res) => {
 				actions.addMultipleNotes(res.data);
@@ -124,9 +122,7 @@ const store = createStore<ApplicationStore>({
 						title,
 					},
 					{
-						headers: {
-							Authorization: `Bearer ${getState().currentUser.token}`,
-						},
+						withCredentials: true,
 					},
 				)
 				.then((res) => {
@@ -163,9 +159,7 @@ const store = createStore<ApplicationStore>({
 						content: noteContent,
 					},
 					{
-						headers: {
-							Authorization: `Bearer ${currentUser.token}`,
-						},
+						withCredentials: true,
 					},
 				)
 				.then((res) => {
@@ -202,9 +196,7 @@ const store = createStore<ApplicationStore>({
 					`/users/${currentUser.username}/notes/${currentNote.id}`,
 					{ title },
 					{
-						headers: {
-							Authorization: `Bearer ${currentUser.token}`,
-						},
+						withCredentials: true,
 					},
 				)
 				.then(() => {
