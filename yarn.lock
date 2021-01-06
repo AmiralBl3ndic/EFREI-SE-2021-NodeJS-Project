@@ -1258,10 +1258,10 @@
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
 
-"@windmill/react-ui@^0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@windmill/react-ui/-/react-ui-0.4.1.tgz#8a96b8dee4188045c8b2dbc885e2c4abfb415abc"
-  integrity sha512-bWwNCB8h30Ac8k9wKNiBQU0QZVSI2jsKM0VuZf2Jk5Hm4/orzG+al91YqAcaAPi3x/CEHs4cF8pNZjGrDz0/+Q==
+"@windmill/react-ui@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@windmill/react-ui/-/react-ui-0.5.0.tgz#29e3f835052626725e5f1f1876519f1a72e43cbf"
+  integrity sha512-mqkOAyTSCoEm0DVXuPD5/39Kl455/3bx0Sko3dXMHoDv2uqAafXxYbfDgO4ZI6THiuonEtNJWFEVxaSyCcUuFA==
   dependencies:
     "@tailwindcss/custom-forms" "0.2.1"
     classnames "2.2.6"
