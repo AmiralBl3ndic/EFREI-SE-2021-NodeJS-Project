@@ -32,7 +32,14 @@ Sentry.init({
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
 
-app.use(cors());
+app.use(
+	cors({
+		origin:
+			process.env.NODE_ENV === 'production'
+				? ['https://ad-versionem.efrei.dev', 'https://ad-versionem.best']
+				: ['http://localhost:3000'],
+	}),
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
